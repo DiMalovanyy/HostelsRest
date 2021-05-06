@@ -4,20 +4,38 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/sirupsen/logrus"
 )
 
 type server struct {
 	router *mux.Router
+	logger *logrus.Logger
 }
 
-func NewServer() *server {
+func NewServer(logLevel string) (*server, error) {
+	logger, err := configureLogger(logLevel)
+	if err != nil {
+		return nil, err
+	}
 
 	s := &server{
 		router: mux.NewRouter(),
+		logger: logger,
 	}
 
 	s.configureRouter()
-	return s
+	logger.Info("Server started")
+	return s, err
+}
+
+func configureLogger(logLevel string) (*logrus.Logger, error) {
+	logLvl, err := logrus.ParseLevel(logLevel)
+	if err != nil {
+		return nil, err
+	}
+	logger := logrus.New()
+	logger.SetLevel(logLvl)
+	return logger, nil
 }
 
 func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -29,7 +47,6 @@ func (s *server) configureRouter() {
 }
 
 func (s *server) handlerHelloRequest() http.HandlerFunc {
-
 	return func(rw http.ResponseWriter, r *http.Request) {
 		rw.Write([]byte("Hello"))
 	}
