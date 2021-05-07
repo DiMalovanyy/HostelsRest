@@ -3,6 +3,7 @@ package restapi
 import (
 	"net/http"
 
+	"github.com/UniverOOP/internal/app/store"
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
 )
@@ -12,7 +13,7 @@ type server struct {
 	logger *logrus.Logger
 }
 
-func NewServer(logLevel string) (*server, error) {
+func NewServer(logLevel string, store store.Store) (*server, error) {
 	logger, err := configureLogger(logLevel)
 	if err != nil {
 		return nil, err
