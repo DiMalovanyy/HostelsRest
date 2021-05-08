@@ -44,11 +44,11 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) configureRouter() {
-	s.router.HandleFunc("/hello", s.handlerHelloRequest())
+	s.router.HandleFunc("/users", s.handlerUsersRequest()).Methods("POST")
 }
 
-func (s *server) handlerHelloRequest() http.HandlerFunc {
+func (s *server) handlerUsersRequest() http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
-		rw.Write([]byte("Hello"))
+
 	}
 }
