@@ -1,27 +1,43 @@
 package restapi
 
 import (
+	"encoding/json"
+	"errors"
 	"net/http"
 
+	"github.com/UniverOOP/internal/app/model"
 	"github.com/UniverOOP/internal/app/store"
 	"github.com/gorilla/mux"
+	"github.com/gorilla/sessions"
 	"github.com/sirupsen/logrus"
 )
 
+const (
+	sessionName = "univerApi"
+)
+
+var (
+	errIncorrectEmailOrPassword = errors.New("incorrect email or password")
+)
+
 type server struct {
-	router *mux.Router
-	logger *logrus.Logger
+	router       *mux.Router
+	logger       *logrus.Logger
+	store        store.Store
+	sessionStore sessions.Store
 }
 
-func NewServer(logLevel string, store store.Store) (*server, error) {
+func NewServer(logLevel string, store store.Store, sessionStore sessions.Store) (*server, error) {
 	logger, err := configureLogger(logLevel)
 	if err != nil {
 		return nil, err
 	}
 
 	s := &server{
-		router: mux.NewRouter(),
-		logger: logger,
+		router:       mux.NewRouter(),
+		logger:       logger,
+		store:        store,
+		sessionStore: sessionStore,
 	}
 
 	s.configureRouter()
@@ -55,14 +71,65 @@ func (s *server) configureRouter() {
 }
 
 func (s *server) handlerLoginRequest() http.HandlerFunc {
-	return func(rw http.ResponseWriter, r *http.Request) {
+	type request struct {
+		Email    string `json:"email"`
+		Password string `json:"password"`
+	}
 
+	return func(rw http.ResponseWriter, r *http.Request) {
+		req := &request{}
+		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
+			s.error(rw, r, http.StatusBadRequest, err)
+			return
+		}
+
+		u, err := s.store.User().FindByEmail(req.Email)
+		if err != nil || !u.ComparePassword(req.Password) {
+			s.error(rw, r, http.StatusUnauthorized, errIncorrectEmailOrPassword)
+			return
+		}
+
+		session, err := s.sessionStore.Get(r, sessionName)
+		if err != nil {
+			s.error(rw, r, http.StatusInternalServerError, err)
+			return
+		}
+		session.Values["user_id"] = u.Id
+		if err := s.sessionStore.Save(r, rw, session); err != nil {
+			s.error(rw, r, http.StatusInternalServerError, err)
+			return
+		}
+
+		s.respond(rw, r, http.StatusOK, nil)
 	}
 }
 
 func (s *server) handlerRegisterRequest() http.HandlerFunc {
-	return func(rw http.ResponseWriter, r *http.Request) {
+	type request struct {
+		Name     string `json:"name"`
+		Email    string `json:"email"`
+		Password string `json:"password"`
+	}
 
+	return func(rw http.ResponseWriter, r *http.Request) {
+		req := &request{}
+		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
+			s.error(rw, r, http.StatusBadRequest, err)
+			return
+		}
+
+		u := &model.User{
+			Name:     req.Name,
+			Email:    req.Email,
+			Password: req.Password,
+		}
+
+		if err := s.store.User().CreateUser(u); err != nil {
+			s.error(rw, r, http.StatusUnprocessableEntity, err)
+			return
+		}
+		u.Sanitize()
+		s.respond(rw, r, http.StatusCreated, u)
 	}
 }
 
@@ -81,5 +148,19 @@ func (s *server) handlerHostelsRequest() http.HandlerFunc {
 func (s *server) handleUpgradeUserRequest() http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
 
+	}
+}
+
+func (s *server) error(rw http.ResponseWriter, r *http.Request, code int, err error) {
+	s.respond(rw, r, code,
+		map[string]string{"error": err.Error()},
+	)
+}
+
+func (s *server) respond(rw http.ResponseWriter, r *http.Request, code int, data interface{}) {
+	rw.WriteHeader(code)
+
+	if data != nil {
+		json.NewEncoder(rw).Encode(data)
 	}
 }

@@ -1,3 +1,4 @@
 bind_addr = ":8080"
 log_level = "debug"
 databaseURL = "host=localhost port=5434 user=postgres password=12345 dbname=univerDB sslmode=disable"
+session_key = "2DB983852F1CD5A4477F02A068E73794A9DD2161A3768AC6A491A9560532B467"

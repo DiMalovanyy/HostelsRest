@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/UniverOOP/internal/app/store/postgresStore"
+	"github.com/gorilla/sessions"
 	_ "github.com/lib/pq"
 )
 
@@ -14,8 +15,12 @@ func Start(config *Config) error {
 	if err != nil {
 		return err
 	}
+	defer db.Close()
 
-	serv, err := NewServer(config.LogLevel, postgresStore.New(db))
+	store := postgresStore.New(db)
+	sessionStore := sessions.NewCookieStore([]byte(config.SessionKey))
+
+	serv, err := NewServer(config.LogLevel, store, sessionStore)
 	if err != nil {
 		return err
 	}
