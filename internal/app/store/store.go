@@ -5,4 +5,5 @@ type Store interface {
 
 	User() UserRepo
 	Faculty() FacultyRepo
+	Hostel() HostelRepo
 }

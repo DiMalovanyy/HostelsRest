@@ -16,3 +16,10 @@ func TestFaculty(t *testing.T) *Faculty {
 		Name: "Cybernetic",
 	}
 }
+
+func TestHostel(t *testing.T) *Hostel {
+	return &Hostel{
+		Description: "Hostel #1",
+		// FacultyId:  ,
+	}
+}

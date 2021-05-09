@@ -1,6 +1,8 @@
 package postgresStore
 
 import (
+	"database/sql"
+
 	"github.com/UniverOOP/internal/app/model"
 	"github.com/UniverOOP/internal/app/store"
 )
@@ -39,4 +41,16 @@ func (f *FucultyRepo) GetAllFaculties() ([]*model.Faculty, error) {
 	}
 
 	return faculties, nil
+}
+
+func (f *FucultyRepo) GetFacultyByName(name string) (*model.Faculty, error) {
+	fac := &model.Faculty{}
+
+	if err := f.store.db.QueryRow("SELECT id, name FROM faculty WHERE name = $1", name).Scan(&fac.Id, &fac.Name); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, store.ErrRecordNotFound
+		}
+		return nil, err
+	}
+	return fac, nil
 }

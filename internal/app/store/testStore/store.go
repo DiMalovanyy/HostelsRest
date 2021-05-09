@@ -8,6 +8,7 @@ import (
 type Store struct {
 	userRepository    *UserRepo
 	facultyRepository *FacultyRepo
+	hostelRepository  *HostelRepo
 }
 
 func New() *Store {
@@ -35,4 +36,16 @@ func (s *Store) Faculty() store.FacultyRepo {
 	}
 
 	return s.facultyRepository
+}
+
+func (s *Store) Hostel() store.HostelRepo {
+	if s.hostelRepository != nil {
+		return s.hostelRepository
+	}
+
+	s.hostelRepository = &HostelRepo{
+		Hostels: make(map[int]*model.Hostel),
+	}
+
+	return s.hostelRepository
 }

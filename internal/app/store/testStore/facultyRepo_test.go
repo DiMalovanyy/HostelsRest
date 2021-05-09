@@ -35,3 +35,19 @@ func TestFucultyRepo_GetAllFaculties(t *testing.T) {
 	assert.Equal(t, fs[0].Name, f.Name)
 
 }
+
+func TestFucultyRepo_GetFucultyByName(t *testing.T) {
+	s := New()
+	repo := s.Faculty()
+	f := model.TestFaculty(t)
+
+	_, err := repo.GetFacultyByName(f.Name)
+	assert.EqualError(t, err, store.ErrRecordNotFound.Error())
+
+	repo.CreateFaculty(f)
+
+	fac, err := repo.GetFacultyByName(f.Name)
+	assert.NoError(t, err)
+	assert.NotNil(t, fac)
+	assert.Equal(t, fac.Name, f.Name)
+}

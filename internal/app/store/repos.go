@@ -20,6 +20,7 @@ type HostelRepo interface {
 type FacultyRepo interface {
 	CreateFaculty(*model.Faculty) error
 	GetAllFaculties() ([]*model.Faculty, error)
+	GetFacultyByName(string) (*model.Faculty, error)
 }
 
 type RoomRepo interface {

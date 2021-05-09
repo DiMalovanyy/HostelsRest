@@ -33,3 +33,12 @@ func (f *FacultyRepo) GetAllFaculties() ([]*model.Faculty, error) {
 
 	return faculties, nil
 }
+
+func (f *FacultyRepo) GetFacultyByName(name string) (*model.Faculty, error) {
+	for _, fac := range f.Faculties {
+		if fac.Name == name {
+			return fac, nil
+		}
+	}
+	return nil, store.ErrRecordNotFound
+}
