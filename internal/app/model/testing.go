@@ -10,3 +10,9 @@ func TestUser(t *testing.T) *User {
 		Password: "password",
 	}
 }
+
+func TestFaculty(t *testing.T) *Faculty {
+	return &Faculty{
+		Name: "Cybernetic",
+	}
+}

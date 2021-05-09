@@ -52,3 +52,29 @@ func TestUserRepo_FindByEmail(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, u)
 }
+
+func TestUserRepo_Upgrade(t *testing.T) {
+	db, teardown := TestDB(t, databaseURL)
+	defer teardown("users")
+
+	s := New(db)
+
+	u := model.TestUser(t)
+
+	repo := s.User()
+	repo.CreateUser(u)
+
+	sex := model.MEN
+	roomId := 1
+	facultyId := 1
+
+	assert.EqualError(t, repo.Upgrade(0, sex, roomId, facultyId), store.ErrRecordNotFound.Error())
+	assert.NoError(t, repo.Upgrade(u.Id, sex, roomId, facultyId))
+
+	u, _ = repo.FindById(u.Id)
+
+	assert.Equal(t, u.Sex, sex)
+	assert.Equal(t, u.RoomId, roomId)
+	assert.Equal(t, u.FacultyId, facultyId)
+
+}

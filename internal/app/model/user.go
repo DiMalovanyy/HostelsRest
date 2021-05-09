@@ -6,13 +6,25 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+type Sex int
+
+const (
+	MEN Sex = iota
+	WOMEN
+	UNDEFINED
+)
+
 type User struct {
-	Id                int
-	Email             string
-	Name              string
-	Password          string
-	EncryptedPassword string
-	RoomNum           int
+	Id                int    `json:"id"`
+	Email             string `json:"email"`
+	Name              string `json:"name"`
+	Password          string `json:"password,omitempty"`
+	EncryptedPassword string `json:"-"`
+
+	//Not main fields
+	Sex       Sex `json:"-"`
+	RoomId    int `json:"-"`
+	FacultyId int `json:"-"`
 }
 
 func (u *User) Validate() error {
@@ -42,4 +54,17 @@ func encrypteString(password string) (string, error) {
 		return "", err
 	}
 	return string(b), nil
+}
+
+func (u *User) Sanitize() {
+	u.Password = ""
+}
+
+func (u *User) ComparePassword(password string) bool {
+	return bcrypt.CompareHashAndPassword([]byte(u.EncryptedPassword), []byte(password)) == nil
+}
+
+//TODO: Test it
+func (u *User) IsUserUpdated() bool {
+	return !(u.Sex == UNDEFINED || u.RoomId == 0 || u.FacultyId == 0)
 }

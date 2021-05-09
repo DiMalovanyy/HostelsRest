@@ -44,10 +44,41 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) configureRouter() {
-	s.router.HandleFunc("/users", s.handlerUsersRequest()).Methods("POST")
+	s.router.HandleFunc("/register", s.handlerRegisterRequest()).Methods("POST")
+	s.router.HandleFunc("/login", s.handlerLoginRequest()).Methods("POST")
+
+	s.router.HandleFunc("/faculties", s.handlerFacultiesRequest()).Methods("GET")
+	s.router.HandleFunc("/hostels", s.handlerHostelsRequest()).Methods("GET")
+
+	//When user authed
+	s.router.HandleFunc("/upgrade_user", s.handleUpgradeUserRequest()).Methods("POST")
 }
 
-func (s *server) handlerUsersRequest() http.HandlerFunc {
+func (s *server) handlerLoginRequest() http.HandlerFunc {
+	return func(rw http.ResponseWriter, r *http.Request) {
+
+	}
+}
+
+func (s *server) handlerRegisterRequest() http.HandlerFunc {
+	return func(rw http.ResponseWriter, r *http.Request) {
+
+	}
+}
+
+func (s *server) handlerFacultiesRequest() http.HandlerFunc {
+	return func(rw http.ResponseWriter, r *http.Request) {
+
+	}
+}
+
+func (s *server) handlerHostelsRequest() http.HandlerFunc {
+	return func(rw http.ResponseWriter, r *http.Request) {
+
+	}
+}
+
+func (s *server) handleUpgradeUserRequest() http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
 
 	}
