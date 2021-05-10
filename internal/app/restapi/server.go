@@ -64,10 +64,9 @@ func (s *server) configureRouter() {
 	s.router.HandleFunc("/register", s.handlerRegisterRequest()).Methods("POST")
 	s.router.HandleFunc("/login", s.handlerLoginRequest()).Methods("POST")
 
-	s.router.HandleFunc("/hostels", s.handlerHostelsRequest()).Methods("GET")
-
 	s.router.HandleFunc("/faculty_hostels", s.handlerFacultyHostles()).Methods("GET")
 	s.router.HandleFunc("/faculties", s.handlerGetAllFaculties()).Methods("GET")
+	s.router.HandleFunc("/hostel_room_members", s.handleHostelRoomMembers()).Methods("GET")
 
 	//When user authed
 	s.router.HandleFunc("/upgrade_user", s.handleUpgradeUserRequest()).Methods("POST")
@@ -158,7 +157,7 @@ func (s *server) handlerFacultyHostles() http.HandlerFunc {
 
 		for _, fac := range faculties {
 			hostels, err := s.store.Hostel().GetHostelsByFucultyId(fac.Id)
-			if err != nil {
+			if err != store.ErrEmptyData && err != nil {
 				continue
 			}
 
@@ -170,12 +169,6 @@ func (s *server) handlerFacultyHostles() http.HandlerFunc {
 		}
 
 		s.respond(rw, r, http.StatusOK, response)
-	}
-}
-
-func (s *server) handlerGetAllHostels() http.HandlerFunc {
-	return func(rw http.ResponseWriter, r *http.Request) {
-
 	}
 }
 
@@ -195,7 +188,7 @@ func (s *server) handlerGetAllFaculties() http.HandlerFunc {
 	}
 }
 
-func (s *server) handlerHostelsRequest() http.HandlerFunc {
+func (s *server) handleHostelRoomMembers() http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
 
 	}

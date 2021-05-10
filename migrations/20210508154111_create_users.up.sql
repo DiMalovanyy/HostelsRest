@@ -5,7 +5,8 @@ CREATE TABLE users (
     encrypted_password varchar,
 
 --Not main fields
-    sex varchar,
+    sex bigserial,
     room_id bigserial,
+    grade bigserial,
     faculty_id bigserial
 );
