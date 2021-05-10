@@ -24,6 +24,9 @@ func main() {
 
 	port := os.Getenv("POST")
 	config.BindAddress = ":" + port
+
+	log.Print(config.BindAddress)
+
 	if err != nil {
 		log.Fatal(err)
 	}
