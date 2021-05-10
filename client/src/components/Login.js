@@ -1,25 +1,81 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-const Login = () => {
+const Login = ({ history }) => {
    const [formData, setFormData] = useState({
       email: '',
       password: ''
    })
 
+   const [notification, setNotification] = useState({
+      active: false,
+      message: '',
+      className: ''
+   })
+
    const { email, password } = formData
+
+   const clearNotification = () => {
+      setNotification({ active: false, message: '', className: '' })
+   }
+
+   const showNotification = (message, className) => {
+      clearNotification()
+      setNotification({ active: true, message, className })
+      setTimeout(() => clearNotification(), 4000)
+   }
+
+   const isValid = () => {
+      if (!email){
+         showNotification('Email field cannot be empty', 'notification-error')
+         return false
+      }
+      if (!password) {
+         showNotification('Password field cannot be empty', 'notification-error')
+         return false
+      }
+
+      return true
+   }
 
    const onChange = event => setFormData({ ...formData, [event.target.name]: event.target.value })
 
    const onSubmit =  async event => {
       event.preventDefault()
-      console.log('Success')
+      
+      if (isValid()) {
+         try {
+            const res = await fetch('http://localhost:8080/login', {
+               method: 'POST',
+               headers: { 'Content-Type': 'application/json' },
+               body: JSON.stringify({ email, password })
+            })
+   
+            const { error } = await res.json()
+   
+            if (error) {
+               showNotification(error.description, 'notification-error')
+               return
+            }
+            
+            // Navigate to the home page once logged in
+            history.push('/')
+         }
+         catch (error) {
+            showNotification('Network error', 'notification-error')
+         }
+      }
    }
 
    return (
       <>
          <h1 className="large text-primary">Sign In</h1>
-         <p className="lead"><i className="fas fa-user"></i> Sign Into Your Account</p>
+         <p className="lead"><i className="fas fa-user"></i> Sign In to Your Account</p>
+         {notification.active &&
+            <div className={`notification ${notification.className}`}>
+               {notification.message}
+            </div>
+         }
          <form className="form" onSubmit={e => onSubmit(e)}>
             <div className="form-group">
                <input type="email" placeholder="Email Address" name="email" value={email} onChange={e => onChange(e)} />
