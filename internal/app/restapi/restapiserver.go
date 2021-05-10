@@ -7,6 +7,7 @@ import (
 	"github.com/UniverOOP/internal/app/store/postgresStore"
 	"github.com/gorilla/sessions"
 	_ "github.com/lib/pq"
+	"github.com/rs/cors"
 )
 
 func Start(config *Config) error {
@@ -24,7 +25,8 @@ func Start(config *Config) error {
 	if err != nil {
 		return err
 	}
-	return http.ListenAndServe(config.BindAddress, serv)
+	handler := cors.Default().Handler(serv)
+	return http.ListenAndServe(config.BindAddress, handler)
 }
 
 func newDB(databaseURL string) (*sql.DB, error) {
