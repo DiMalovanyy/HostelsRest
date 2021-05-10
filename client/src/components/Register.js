@@ -54,11 +54,15 @@ const Register = () => {
       event.preventDefault()
       
       if (isValid()) {
+         const data = {
+            name, email, password
+         }
+
          try {
             const res = await fetch('http://localhost:8080/register', {
                method: 'POST',
                headers: { 'Content-Type': 'application/json' },
-               body: JSON.stringify({ name, email, password })
+               body: JSON.stringify(data)
             })
    
             const { error } = await res.json()
