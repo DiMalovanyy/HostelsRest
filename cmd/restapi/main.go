@@ -22,7 +22,7 @@ func main() {
 	config := restapi.NewConfig()
 	_, err := toml.DecodeFile(configPath, config)
 
-	port := os.Getenv("POST")
+	port := os.Getenv("PORT")
 	config.BindAddress = ":" + port
 
 	log.Print(config.BindAddress)
