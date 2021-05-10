@@ -15,6 +15,7 @@ type UserRepo interface {
 type HostelRepo interface {
 	CreateHostel(*model.Hostel) error
 	GetHostelsByFucultyId(int) ([]*model.Hostel, error)
+	// GetHostelByName(string) (*model.Hostel, error)
 }
 
 type FacultyRepo interface {
@@ -25,6 +26,6 @@ type FacultyRepo interface {
 
 type RoomRepo interface {
 	CreateRoom(*model.Room) error
-	//Return all roms that located in the same hostelId as this room
-	GetAllNeighborlyRooms() ([]*model.Room, error)
+	//Return all roms that located in the same hostelId
+	GetAllRoomsByHostleId(int) ([]*model.Room, error)
 }

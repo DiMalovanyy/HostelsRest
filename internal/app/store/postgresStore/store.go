@@ -11,6 +11,7 @@ type Store struct {
 	userRepository    *UserRepo
 	facultyRepository *FucultyRepo
 	hostelRepository  *HostelRepo
+	roomRepository    *RoomRepo
 }
 
 func New(db *sql.DB) *Store {
@@ -49,4 +50,16 @@ func (s *Store) Hostel() store.HostelRepo {
 	}
 
 	return s.hostelRepository
+}
+
+func (s *Store) Room() store.RoomRepo {
+	if s.roomRepository != nil {
+		return s.roomRepository
+	}
+
+	s.roomRepository = &RoomRepo{
+		store: s,
+	}
+
+	return s.roomRepository
 }

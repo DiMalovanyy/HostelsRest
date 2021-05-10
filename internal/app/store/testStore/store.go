@@ -9,6 +9,7 @@ type Store struct {
 	userRepository    *UserRepo
 	facultyRepository *FacultyRepo
 	hostelRepository  *HostelRepo
+	roomRepository    *RoomRepo
 }
 
 func New() *Store {
@@ -48,4 +49,16 @@ func (s *Store) Hostel() store.HostelRepo {
 	}
 
 	return s.hostelRepository
+}
+
+func (s *Store) Room() store.RoomRepo {
+	if s.roomRepository != nil {
+		return s.roomRepository
+	}
+
+	s.roomRepository = &RoomRepo{
+		Rooms: make(map[int]*model.Room),
+	}
+
+	return s.roomRepository
 }
