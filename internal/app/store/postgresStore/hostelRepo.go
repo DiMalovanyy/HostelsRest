@@ -22,7 +22,7 @@ func (h *HostelRepo) GetHostelsByFucultyId(fucultyId int) ([]*model.Hostel, erro
 
 	hostels := make([]*model.Hostel, 0)
 
-	rows, err := h.store.db.Query("SELECT id, description, fuculty_id FROM hostels WHERE fuculty_id = $1", fucultyId)
+	rows, err := h.store.db.Query("SELECT id, description, faculty_id FROM hostels WHERE faculty_id = $1", fucultyId)
 	if err != nil {
 		return nil, err
 	}
