@@ -3,6 +3,7 @@ package restapi
 import (
 	"encoding/json"
 	"errors"
+	"log"
 	"net/http"
 
 	"github.com/UniverOOP/internal/app/model"
@@ -141,11 +142,11 @@ func (s *server) handlerFacultyHostles() http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
 
 		type ResponseInnerStruct struct {
-			hostel_name string
+			hostel_name string `json:"hostel_name"`
 		}
 		type ResponseStruct struct {
-			faculty_name string
-			hostels      []ResponseInnerStruct
+			faculty_name string                `json:"faculty_name"`
+			hostels      []ResponseInnerStruct `json:"hostels"`
 		}
 
 		responseStruct := make([]ResponseStruct, 0)
@@ -158,7 +159,7 @@ func (s *server) handlerFacultyHostles() http.HandlerFunc {
 		for _, fac := range faculties {
 			hostels, err := s.store.Hostel().GetHostelsByFucultyId(fac.Id)
 			if err != nil {
-				s.error(rw, r, http.StatusUnprocessableEntity, err)
+				continue
 			}
 			hostelsStr := make([]ResponseInnerStruct, 0)
 			for _, hs := range hostels {
@@ -166,6 +167,7 @@ func (s *server) handlerFacultyHostles() http.HandlerFunc {
 			}
 			responseStruct = append(responseStruct, ResponseStruct{faculty_name: fac.Name, hostels: hostelsStr})
 		}
+		log.Print(responseStruct)
 		s.respond(rw, r, http.StatusOK, responseStruct)
 	}
 }
