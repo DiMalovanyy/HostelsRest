@@ -54,9 +54,7 @@ const Register = () => {
       event.preventDefault()
       
       if (isValid()) {
-         const data = {
-            name, email, password
-         }
+         const data = { name, email, password }
 
          try {
             const res = await fetch('http://localhost:8080/register', {
