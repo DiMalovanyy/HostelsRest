@@ -1,21 +1,11 @@
-import PropTypes from 'prop-types'
 import HousingList from './HousingList'
 
-const Home = ({ view }) => {
+const Home = () => {
    return (
       <section id="home">
-         <div className="home-left">
-            <HousingList />
-         </div>
-         <div className="home-right">
-            {view === 'user' && 'hahaha'}
-         </div>
+         <HousingList />
       </section>
    )
-}
-
-Home.propTypes = {
-   view: PropTypes.string.isRequired
 }
 
 export default Home

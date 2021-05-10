@@ -48,7 +48,7 @@ const Login = ({ onLogIn }) => {
       
       if (isValid()) {
          try {
-            const res = await axios.post('https://pacific-escarpment-18341.herokuapp.com/login', { email, password }, { withCredentials: true })
+            const res = await axios.post('https://pacific-escarpment-18341.herokuapp.com/login', { email, password })
 
             const { error } = await res.data
    

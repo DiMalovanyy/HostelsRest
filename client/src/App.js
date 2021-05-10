@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Home from './components/Home'
@@ -11,21 +11,15 @@ const App = () => {
    const [cookie, setCookie] = useState({})
    const [view, setView] = useState('default')
 
-   useEffect(() => {
-      
-   })
-
    const logIn = () => {
       setView('user')
    }
-
-   // checkCookie()
 
    return (
       <Router>
          <Navbar />
          <Switch>
-            <Route exact path="/" render={() => <Home view={view} />} />
+            <Route exact path="/" render={() => <Home />} />
             <Route path="/">
                <section className="container">
                   <Route exact path="/register" component={Register} />
