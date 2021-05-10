@@ -67,7 +67,7 @@ func (s *server) configureRouter() {
 	s.router.HandleFunc("/faculties", s.handlerFacultiesRequest()).Methods("GET")
 	s.router.HandleFunc("/hostels", s.handlerHostelsRequest()).Methods("GET")
 
-	s.router.HandleFunc("/faculty_hostles", s.handlerFacultyHostles()).Methods("GET")
+	s.router.HandleFunc("/faculty_hostels", s.handlerFacultyHostles()).Methods("GET")
 
 	//When user authed
 	s.router.HandleFunc("/upgrade_user", s.handleUpgradeUserRequest()).Methods("POST")
