@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"log"
+	"os"
 
 	"github.com/BurntSushi/toml"
 	"github.com/UniverOOP/internal/app/restapi"
@@ -20,6 +21,9 @@ func main() {
 	flag.Parse()
 	config := restapi.NewConfig()
 	_, err := toml.DecodeFile(configPath, config)
+
+	port := os.Getenv("POST")
+	config.BindAddress = ":" + port
 	if err != nil {
 		log.Fatal(err)
 	}
