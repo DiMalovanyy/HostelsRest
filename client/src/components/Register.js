@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
+import axios from 'axios'
+
 const Register = () => {
    const [formData, setFormData] = useState({
       name: '',
@@ -54,17 +56,12 @@ const Register = () => {
       event.preventDefault()
       
       if (isValid()) {
-         const data = { name, email, password }
+         const data = { name: name, email: email, password: password }
 
          try {
-            const res = await fetch('https://pacific-escarpment-18341.herokuapp.com/register', {
-               method: 'POST',
-               headers: { 'Content-Type': 'application/json' },
-               mode: 'no-cors',
-               body: JSON.stringify(data)
-            })
+            const res = await axios.post('https://pacific-escarpment-18341.herokuapp.com/register', data)
    
-            const { error } = await res.json()
+            const { error } = res.data
    
             if (error) {
                showNotification(error.description, 'notification-error')

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 
 const Login = ({ history }) => {
    const [formData, setFormData] = useState({
@@ -45,14 +46,9 @@ const Login = ({ history }) => {
       
       if (isValid()) {
          try {
-            const res = await fetch('https://pacific-escarpment-18341.herokuapp.com/login', {
-               method: 'POST',
-               headers: { 'Content-Type': 'application/json' },
-               body: JSON.stringify({ email, password }),
-               mode: 'no-cors'
-            })
-   
-            const { error } = await res.json()
+            const res = await axios.post('https://pacific-escarpment-18341.herokuapp.com/login', { email, password })
+
+            const { error } = await res.data
    
             if (error) {
                showNotification(error.description, 'notification-error')
@@ -63,6 +59,7 @@ const Login = ({ history }) => {
             history.push('/')
          }
          catch (error) {
+            console.log(error)
             showNotification('Network error', 'notification-error')
          }
       }
