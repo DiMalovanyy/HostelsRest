@@ -6,12 +6,12 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
 import SendIcon from '@material-ui/icons/Send';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
+
+import { getAllHousings } from '../service/data'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,20 +25,30 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const HousingList = () => {
-  const classes = useStyles()
-  const [open, setOpen] = React.useState(true)
+   const classes = useStyles()
+   const [open, setOpen] = React.useState(true)
 
-  const [items, setItems] = useState([])
+   const [items, setItems] = useState([])
 
-  const handleClick = () => {
-    setOpen(!open)
-  }
+   const handleClick = () => {
+      setOpen(!open)
+   }
 
-  useEffect(() => {
+   useEffect(() => {
+      try {
+         (async () => {
+            const housings = await getAllHousings()
+            console.log(housings)
+            setItems(housings)
+         })()
+      }
+      catch (error) {
+         console.log('couldnt get data')
+      }
+   }, [])
 
-  })
-
-  return (
+  if (items && items.length > 0) {
+     return (
       <List
          component="nav"
          aria-labelledby="nested-list-subheader"
@@ -57,13 +67,13 @@ const HousingList = () => {
          </ListItem>
          <ListItem button>
             <ListItemIcon>
-               <DraftsIcon />
+               <SendIcon />
             </ListItemIcon>
             <ListItemText primary="Drafts" />
          </ListItem>
          <ListItem button onClick={handleClick}>
             <ListItemIcon>
-               <InboxIcon />
+               <SendIcon />
             </ListItemIcon>
             <ListItemText primary="Inbox" />
             {open ? <ExpandLess /> : <ExpandMore />}
@@ -80,7 +90,11 @@ const HousingList = () => {
          </Collapse>
 
       </List>
-  );
+     )
+  }
+  else {
+     return <h2>No data</h2>
+  }
 }
 
 export default HousingList
