@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
@@ -28,51 +28,58 @@ const HousingList = () => {
   const classes = useStyles()
   const [open, setOpen] = React.useState(true)
 
+  const [items, setItems] = useState([])
+
   const handleClick = () => {
     setOpen(!open)
   }
 
+  useEffect(() => {
+
+  })
+
   return (
-    <List
-      component="nav"
-      aria-labelledby="nested-list-subheader"
-      subheader={
-        <ListSubheader component="div" id="nested-list-subheader">
-          Nested List Items
-        </ListSubheader>
-      }
-      className={classes.root}
-    >
-      <ListItem button>
-        <ListItemIcon>
-          <SendIcon />
-        </ListItemIcon>
-        <ListItemText primary="Sent mail" />
-      </ListItem>
-      <ListItem button>
-        <ListItemIcon>
-          <DraftsIcon />
-        </ListItemIcon>
-        <ListItemText primary="Drafts" />
-      </ListItem>
-      <ListItem button onClick={handleClick}>
-        <ListItemIcon>
-          <InboxIcon />
-        </ListItemIcon>
-        <ListItemText primary="Inbox" />
-        {open ? <ExpandLess /> : <ExpandMore />}
-      </ListItem>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItem button className={classes.nested}>
+      <List
+         component="nav"
+         aria-labelledby="nested-list-subheader"
+         subheader={
+         <ListSubheader component="div" id="nested-list-subheader">
+            Faculties
+         </ListSubheader>
+         }
+         className={classes.root}
+      >
+         <ListItem button>
             <ListItemIcon>
-              <StarBorder />
+               <SendIcon />
             </ListItemIcon>
-            <ListItemText primary="Starred" />
-          </ListItem>
-        </List>
-      </Collapse>
-    </List>
+            <ListItemText primary="Sent mail" />
+         </ListItem>
+         <ListItem button>
+            <ListItemIcon>
+               <DraftsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Drafts" />
+         </ListItem>
+         <ListItem button onClick={handleClick}>
+            <ListItemIcon>
+               <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary="Inbox" />
+            {open ? <ExpandLess /> : <ExpandMore />}
+         </ListItem>
+         <Collapse in={open} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+               <ListItem button className={classes.nested}>
+                  <ListItemIcon>
+                  <StarBorder />
+                  </ListItemIcon>
+                  <ListItemText primary="Starred" />
+               </ListItem>
+            </List>
+         </Collapse>
+
+      </List>
   );
 }
 

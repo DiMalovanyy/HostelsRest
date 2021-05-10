@@ -15,6 +15,12 @@ const App = () => {
       
    })
 
+   const logIn = () => {
+      setView('user')
+   }
+
+   // checkCookie()
+
    return (
       <Router>
          <Navbar />
@@ -23,7 +29,7 @@ const App = () => {
             <Route path="/">
                <section className="container">
                   <Route exact path="/register" component={Register} />
-                  <Route exact path="/login" component={Login} />
+                  <Route exact path="/login" render={() => <Login onLogIn={logIn} />} />
                </section>
             </Route>
          </Switch>

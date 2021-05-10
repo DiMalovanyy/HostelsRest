@@ -8,7 +8,7 @@ const Home = ({ view }) => {
             <HousingList />
          </div>
          <div className="home-right">
-            
+            {view === 'user' && 'hahaha'}
          </div>
       </section>
    )

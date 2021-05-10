@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import axios from 'axios'
 
-const Login = ({ history }) => {
+const Login = ({ onLogIn }) => {
    const [formData, setFormData] = useState({
       email: '',
       password: ''
@@ -15,6 +15,8 @@ const Login = ({ history }) => {
    })
 
    const { email, password } = formData
+
+   const history = useHistory()
 
    const clearNotification = () => {
       setNotification({ active: false, message: '', className: '' })
@@ -46,7 +48,7 @@ const Login = ({ history }) => {
       
       if (isValid()) {
          try {
-            const res = await axios.post('https://pacific-escarpment-18341.herokuapp.com/login', { email, password })
+            const res = await axios.post('https://pacific-escarpment-18341.herokuapp.com/login', { email, password }, { withCredentials: true })
 
             const { error } = await res.data
    
@@ -54,6 +56,8 @@ const Login = ({ history }) => {
                showNotification(error.description, 'notification-error')
                return
             }
+
+            onLogIn()
             
             // Navigate to the home page once logged in
             history.push('/')
