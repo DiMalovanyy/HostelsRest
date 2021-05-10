@@ -1,5 +1,3 @@
-import DataTable from './DataTable'
-
 const Home = () => {
    return (
       <section id="home">
