@@ -67,6 +67,8 @@ func (s *server) configureRouter() {
 	s.router.HandleFunc("/faculties", s.handlerFacultiesRequest()).Methods("GET")
 	s.router.HandleFunc("/hostels", s.handlerHostelsRequest()).Methods("GET")
 
+	s.router.HandleFunc("/faculty_hostels", s.handlerFacultyHostles()).Methods("GET")
+
 	//When user authed
 	s.router.HandleFunc("/upgrade_user", s.handleUpgradeUserRequest()).Methods("POST")
 }
@@ -132,6 +134,42 @@ func (s *server) handlerRegisterRequest() http.HandlerFunc {
 		}
 		u.Sanitize()
 		s.respond(rw, r, http.StatusCreated, u)
+	}
+}
+
+func (s *server) handlerFacultyHostles() http.HandlerFunc {
+	return func(rw http.ResponseWriter, r *http.Request) {
+		type Hostel struct {
+			Hostel_name string `json:"hostel_name"`
+		}
+		type Faculty struct {
+			Faculty_name string   `json:"faculty_name"`
+			Housings     []Hostel `json:"housings"`
+		}
+
+		type Response []Faculty
+
+		response := make(Response, 0)
+
+		faculties, err := s.store.Faculty().GetAllFaculties()
+		if err != nil {
+			s.error(rw, r, http.StatusUnprocessableEntity, err)
+		}
+
+		for _, fac := range faculties {
+			hostels, err := s.store.Hostel().GetHostelsByFucultyId(fac.Id)
+			if err != nil {
+				continue
+			}
+
+			hostelsStr := make([]Hostel, 0)
+			for _, hs := range hostels {
+				hostelsStr = append(hostelsStr, Hostel{Hostel_name: hs.Description})
+			}
+			response = append(response, Faculty{Faculty_name: fac.Name, Housings: hostelsStr})
+		}
+
+		s.respond(rw, r, http.StatusOK, response)
 	}
 }
 
