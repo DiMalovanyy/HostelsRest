@@ -142,15 +142,16 @@ func (s *server) handlerFacultyHostles() http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
 
 		type ResponseInnerStruct struct {
-			hostel_name string `json:"hostel_name"`
+			hostel_name string
 		}
 		type ResponseStruct struct {
-			faculty_name string                `json:"faculty_name"`
-			hostels      []ResponseInnerStruct `json:"hostels"`
+			faculty_name string
+			hostels      []ResponseInnerStruct
 		}
 
-		responseStruct := make([]ResponseStruct, 0)
+		type Response []ResponseStruct
 
+		responseStruct := make(Response, 0)
 		faculties, err := s.store.Faculty().GetAllFaculties()
 		if err != nil {
 			s.error(rw, r, http.StatusUnprocessableEntity, err)
