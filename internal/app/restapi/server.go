@@ -57,6 +57,10 @@ func configureLogger(logLevel string) (*logrus.Logger, error) {
 }
 
 func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	s.router.ServeHTTP(w, r)
+}
+
+func (s *server) configureRouter() {
 	s.router.Use(cors.Handler(cors.Options{
 		// AllowedOrigins:   []string{"https://foo.com"}, // Use this to allow specific origin hosts
 		AllowedOrigins: []string{"https://*", "http://*"},
@@ -67,10 +71,7 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		AllowCredentials: false,
 		MaxAge:           300, // Maximum value not ignored by any of major browsers
 	}))
-	s.router.ServeHTTP(w, r)
-}
 
-func (s *server) configureRouter() {
 	s.router.HandleFunc("/register", s.handlerRegisterRequest()).Methods("POST")
 	s.router.HandleFunc("/login", s.handlerLoginRequest()).Methods("POST")
 
