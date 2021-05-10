@@ -64,10 +64,10 @@ func (s *server) configureRouter() {
 	s.router.HandleFunc("/register", s.handlerRegisterRequest()).Methods("POST")
 	s.router.HandleFunc("/login", s.handlerLoginRequest()).Methods("POST")
 
-	s.router.HandleFunc("/faculties", s.handlerFacultiesRequest()).Methods("GET")
 	s.router.HandleFunc("/hostels", s.handlerHostelsRequest()).Methods("GET")
 
 	s.router.HandleFunc("/faculty_hostels", s.handlerFacultyHostles()).Methods("GET")
+	s.router.HandleFunc("/faculties", s.handlerGetAllFaculties()).Methods("GET")
 
 	//When user authed
 	s.router.HandleFunc("/upgrade_user", s.handleUpgradeUserRequest()).Methods("POST")
@@ -173,9 +173,25 @@ func (s *server) handlerFacultyHostles() http.HandlerFunc {
 	}
 }
 
-func (s *server) handlerFacultiesRequest() http.HandlerFunc {
+func (s *server) handlerGetAllHostels() http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
 
+	}
+}
+
+func (s *server) handlerGetAllFaculties() http.HandlerFunc {
+	return func(rw http.ResponseWriter, r *http.Request) {
+		fucs := make([]string, 0)
+		faculties, err := s.store.Faculty().GetAllFaculties()
+		if err != nil {
+			s.error(rw, r, http.StatusUnprocessableEntity, err)
+		}
+
+		for _, f := range faculties {
+			fucs = append(fucs, f.Name)
+		}
+
+		s.respond(rw, r, http.StatusOK, fucs)
 	}
 }
 
