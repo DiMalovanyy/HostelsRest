@@ -168,7 +168,9 @@ func (s *server) handlerFacultyHostles() http.HandlerFunc {
 			responseStruct = append(responseStruct, ResponseStruct{faculty_name: fac.Name, hostels: hostelsStr})
 		}
 		log.Print(responseStruct)
-		s.respond(rw, r, http.StatusOK, responseStruct)
+		rw.WriteHeader(http.StatusOK)
+		json, _ := json.Marshal(responseStruct)
+		rw.Write(json)
 	}
 }
 
