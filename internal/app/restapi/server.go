@@ -3,7 +3,6 @@ package restapi
 import (
 	"encoding/json"
 	"errors"
-	"log"
 	"net/http"
 
 	"github.com/UniverOOP/internal/app/model"
@@ -140,18 +139,18 @@ func (s *server) handlerRegisterRequest() http.HandlerFunc {
 
 func (s *server) handlerFacultyHostles() http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
-
-		type ResponseInnerStruct struct {
-			hostel_name string
+		type Hostel struct {
+			Hostel_name string `json:"hostel_name"`
 		}
-		type ResponseStruct struct {
-			faculty_name string
-			hostels      []ResponseInnerStruct
+		type Faculty struct {
+			Faculty_name string   `json:"faculty_name"`
+			Housings     []Hostel `json:"housings"`
 		}
 
-		type Response []ResponseStruct
+		type Response []Faculty
 
-		responseStruct := make(Response, 0)
+		response := make(Response, 0)
+
 		faculties, err := s.store.Faculty().GetAllFaculties()
 		if err != nil {
 			s.error(rw, r, http.StatusUnprocessableEntity, err)
@@ -162,16 +161,15 @@ func (s *server) handlerFacultyHostles() http.HandlerFunc {
 			if err != nil {
 				continue
 			}
-			hostelsStr := make([]ResponseInnerStruct, 0)
+
+			hostelsStr := make([]Hostel, 0)
 			for _, hs := range hostels {
-				hostelsStr = append(hostelsStr, ResponseInnerStruct{hostel_name: hs.Description})
+				hostelsStr = append(hostelsStr, Hostel{Hostel_name: hs.Description})
 			}
-			responseStruct = append(responseStruct, ResponseStruct{faculty_name: fac.Name, hostels: hostelsStr})
+			response = append(response, Faculty{Faculty_name: fac.Name, Housings: hostelsStr})
 		}
-		log.Print(responseStruct)
-		rw.WriteHeader(http.StatusOK)
-		json, _ := json.Marshal(responseStruct)
-		rw.Write(json)
+
+		s.respond(rw, r, http.StatusOK, response)
 	}
 }
 
