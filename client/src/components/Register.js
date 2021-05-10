@@ -54,12 +54,10 @@ const Register = () => {
       event.preventDefault()
       
       if (isValid()) {
-         const data = {
-            name, email, password
-         }
+         const data = { name, email, password }
 
          try {
-            const res = await fetch('http://localhost:8080/register', {
+            const res = await fetch('https://pacific-escarpment-18341.herokuapp.com/register', {
                method: 'POST',
                headers: { 'Content-Type': 'application/json' },
                body: JSON.stringify(data)
@@ -75,6 +73,7 @@ const Register = () => {
             showNotification('Profile created', 'notification-success')
          }
          catch (error) {
+            console.log(error)
             showNotification('Network error', 'notification-error')
          }
       }
