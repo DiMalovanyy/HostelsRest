@@ -11,7 +11,7 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
 
-import { getAllHousings } from '../service/data'
+import { getAllHousings, getFaculties } from '../service/data'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,7 +38,6 @@ const HousingList = () => {
       try {
          (async () => {
             const housings = await getAllHousings()
-            console.log(housings)
             setItems(housings)
          })()
       }
@@ -59,36 +58,14 @@ const HousingList = () => {
          }
          className={classes.root}
       >
-         <ListItem button>
-            <ListItemIcon>
-               <SendIcon />
-            </ListItemIcon>
-            <ListItemText primary="Sent mail" />
-         </ListItem>
-         <ListItem button>
-            <ListItemIcon>
-               <SendIcon />
-            </ListItemIcon>
-            <ListItemText primary="Drafts" />
-         </ListItem>
-         <ListItem button onClick={handleClick}>
-            <ListItemIcon>
-               <SendIcon />
-            </ListItemIcon>
-            <ListItemText primary="Inbox" />
-            {open ? <ExpandLess /> : <ExpandMore />}
-         </ListItem>
-         <Collapse in={open} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-               <ListItem button className={classes.nested}>
-                  <ListItemIcon>
-                  <StarBorder />
-                  </ListItemIcon>
-                  <ListItemText primary="Starred" />
-               </ListItem>
-            </List>
-         </Collapse>
-
+         {items.map((item, i) => (
+            <ListItem key={i} button onClick={handleClick}>
+               <ListItemIcon>
+                  <SendIcon />
+               </ListItemIcon>
+               <ListItemText primary={item.faculty_name} />
+            </ListItem>
+         ))}
       </List>
      )
   }
