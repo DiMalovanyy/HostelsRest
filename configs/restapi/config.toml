@@ -1,4 +1,4 @@
 bind_addr = ":8080"
 log_level = "debug"
-databaseURL = "host=ec2-54-90-211-192.compute-1.amazonaws.com port=5432 user=pzsumgcucebrbb password=123675b162b381c16af13becd943e26f926a74fd5e095204d2031031c1f717d40d345 dbname=dbfsp44r075phg sslmode=disable"
+databaseURL = "postgres://pzsumgcucebrbb:675b162b381c16af13becd943e26f926a74fd5e095204d2031031c1f717d40d3@ec2-54-90-211-192.compute-1.amazonaws.com:5432/dbfsp44r075phg"
 session_key = "2DB983852F1CD5A4477F02A068E73794A9DD2161A3768AC6A491A9560532B467"
