@@ -1,6 +1,7 @@
 package restapi
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"net/http"
@@ -13,18 +14,47 @@ import (
 )
 
 const (
-	sessionName = "univerApi"
+	sessionName        = "univerApi"
+	ctxKeyUser  ctxKey = iota
 )
 
 var (
 	errIncorrectEmailOrPassword = errors.New("incorrect email or password")
+	errNotAuthenticated         = errors.New("not authenticated")
 )
+
+type ctxKey int8
 
 type server struct {
 	router       *mux.Router
 	logger       *logrus.Logger
 	store        store.Store
 	sessionStore sessions.Store
+}
+
+//Midleware
+func (s *server) authenticateUser(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		session, err := s.sessionStore.Get(r, sessionName)
+		if err != nil {
+			s.error(w, r, http.StatusInternalServerError, err)
+			return
+		}
+
+		id, ok := session.Values["user_id"]
+		if !ok {
+			s.error(w, r, http.StatusUnauthorized, errNotAuthenticated)
+			return
+		}
+
+		u, err := s.store.User().FindById(id.(int))
+		if err != nil {
+			s.error(w, r, http.StatusUnauthorized, errNotAuthenticated)
+			return
+		}
+
+		next.ServeHTTP(w, r.WithContext(context.WithValue(r.Context(), ctxKeyUser, u)))
+	})
 }
 
 func NewServer(logLevel string, store store.Store, sessionStore sessions.Store) (*server, error) {
@@ -67,6 +97,7 @@ func (s *server) configureRouter() {
 	s.router.HandleFunc("/faculty_hostels", s.handlerFacultyHostles()).Methods("GET")
 	s.router.HandleFunc("/faculties", s.handlerGetAllFaculties()).Methods("GET")
 	s.router.HandleFunc("/hostel_room_members", s.handleHostelRoomMembers()).Methods("GET")
+	s.router.HandleFunc("/user_status", s.handleGetUserStatus()).Methods("GET")
 
 	//When user authed
 	s.router.HandleFunc("/upgrade_user", s.handleUpgradeUserRequest()).Methods("POST")
@@ -185,6 +216,37 @@ func (s *server) handlerGetAllFaculties() http.HandlerFunc {
 		}
 
 		s.respond(rw, r, http.StatusOK, fucs)
+	}
+}
+
+func (s *server) handleGetUserStatus() http.HandlerFunc {
+
+	return func(rw http.ResponseWriter, r *http.Request) {
+		var responseBool bool
+		session, err := s.sessionStore.Get(r, sessionName)
+		if err != nil {
+			s.error(rw, r, http.StatusInternalServerError, err)
+			return
+		}
+
+		id, ok := session.Values["user_id"]
+		if !ok {
+			s.error(rw, r, http.StatusUnauthorized, errNotAuthenticated)
+			return
+		}
+
+		u, err := s.store.User().FindById(id.(int))
+		if err != nil {
+			s.error(rw, r, http.StatusUnauthorized, errNotAuthenticated)
+			return
+		}
+
+		if u.RoomId == 0 || u.FacultyId == 0 {
+			responseBool = false
+		} else {
+			responseBool = true
+		}
+		s.respond(rw, r, http.StatusOK, responseBool)
 	}
 }
 

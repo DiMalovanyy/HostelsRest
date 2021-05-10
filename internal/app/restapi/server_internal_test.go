@@ -3,12 +3,14 @@ package restapi
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/UniverOOP/internal/app/model"
 	"github.com/UniverOOP/internal/app/store/testStore"
+	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
 	"github.com/stretchr/testify/assert"
 )
@@ -106,6 +108,49 @@ func TestServer_HandleLoginRequest(t *testing.T) {
 			req, _ := http.NewRequest(http.MethodPost, "/login", b)
 			s.ServeHTTP(rec, req)
 
+			assert.Equal(t, tc.expectedCode, rec.Code)
+		})
+	}
+}
+
+func TestServer_AuthenticateUser(t *testing.T) {
+	store := testStore.New()
+	u := model.TestUser(t)
+	store.User().CreateUser(u)
+
+	testCases := []struct {
+		name         string
+		cookieValue  map[interface{}]interface{}
+		expectedCode int
+	}{
+		{
+			name: "authenticated",
+			cookieValue: map[interface{}]interface{}{
+				"user_id": u.Id,
+			},
+			expectedCode: http.StatusOK,
+		},
+		{
+			name:         "not authenticated",
+			cookieValue:  nil,
+			expectedCode: http.StatusUnauthorized,
+		},
+	}
+
+	secretKey := []byte("secret")
+	s, _ := NewServer("error", store, sessions.NewCookieStore(secretKey))
+	sc := securecookie.New(secretKey, nil)
+	mw := s.authenticateUser(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	}))
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			rec := httptest.NewRecorder()
+			req, _ := http.NewRequest(http.MethodGet, "/", nil)
+			cookieStr, _ := sc.Encode(sessionName, tc.cookieValue)
+			req.Header.Set("Cookie", fmt.Sprintf("%s=%s", sessionName, cookieStr))
+			mw.ServeHTTP(rec, req)
 			assert.Equal(t, tc.expectedCode, rec.Code)
 		})
 	}
