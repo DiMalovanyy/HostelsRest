@@ -48,7 +48,8 @@ const Login = ({ history }) => {
             const res = await fetch('https://pacific-escarpment-18341.herokuapp.com/login', {
                method: 'POST',
                headers: { 'Content-Type': 'application/json' },
-               body: JSON.stringify({ email, password })
+               body: JSON.stringify({ email, password }),
+               mode: 'no-cors'
             })
    
             const { error } = await res.json()

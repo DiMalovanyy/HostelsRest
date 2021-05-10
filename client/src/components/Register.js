@@ -60,6 +60,7 @@ const Register = () => {
             const res = await fetch('https://pacific-escarpment-18341.herokuapp.com/register', {
                method: 'POST',
                headers: { 'Content-Type': 'application/json' },
+               mode: 'no-cors',
                body: JSON.stringify(data)
             })
    
