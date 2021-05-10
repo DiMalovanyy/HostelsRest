@@ -10,7 +10,7 @@ import (
 
 func TestHostelRepo_CreateHostel(t *testing.T) {
 	db, teardown := TestDB(t, databaseURL)
-	defer teardown("hostels")
+	defer teardown("hostels", "faculty")
 
 	s := New(db)
 
@@ -28,7 +28,7 @@ func TestHostelRepo_CreateHostel(t *testing.T) {
 
 func TestHostelRepo_GetHostelsByfucultyId(t *testing.T) {
 	db, teardown := TestDB(t, databaseURL)
-	defer teardown("hostels")
+	defer teardown("hostels", "faculty")
 
 	s := New(db)
 

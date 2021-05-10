@@ -10,7 +10,7 @@ import (
 
 func TestRoomRepo_CreateRoom(t *testing.T) {
 	db, teardown := TestDB(t, databaseURL)
-	defer teardown("rooms")
+	defer teardown("rooms", "faculty", "hostels")
 
 	s := New(db)
 	facRepo := s.Faculty()
@@ -34,7 +34,7 @@ func TestRoomRepo_CreateRoom(t *testing.T) {
 
 func TestRoomRepo_GetRoomsByHostelId(t *testing.T) {
 	db, teardown := TestDB(t, databaseURL)
-	defer teardown("rooms")
+	defer teardown("rooms", "faculty", "hostels")
 
 	s := New(db)
 	facRepo := s.Faculty()
