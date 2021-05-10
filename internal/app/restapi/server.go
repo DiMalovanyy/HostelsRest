@@ -56,6 +56,7 @@ func configureLogger(logLevel string) (*logrus.Logger, error) {
 }
 
 func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	s.router.ServeHTTP(w, r)
 }
 
@@ -112,9 +113,7 @@ func (s *server) handlerRegisterRequest() http.HandlerFunc {
 	}
 
 	return func(rw http.ResponseWriter, r *http.Request) {
-		enableCors(&rw)
 
-		logrus.Info(r.Body)
 		req := &request{}
 		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
 			s.error(rw, r, http.StatusBadRequest, err)
