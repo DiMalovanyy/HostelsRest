@@ -112,7 +112,7 @@ func (s *server) handlerRegisterRequest() http.HandlerFunc {
 	}
 
 	return func(rw http.ResponseWriter, r *http.Request) {
-		rw.Header().Set("Access-Control-Allow-Origin", "*")
+		enableCors(&rw)
 		req := &request{}
 		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
 			s.error(rw, r, http.StatusBadRequest, err)
@@ -164,4 +164,8 @@ func (s *server) respond(rw http.ResponseWriter, r *http.Request, code int, data
 	if data != nil {
 		json.NewEncoder(rw).Encode(data)
 	}
+}
+
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 }
