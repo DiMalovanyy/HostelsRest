@@ -8,7 +8,6 @@ import (
 
 	"github.com/UniverOOP/internal/app/model"
 	"github.com/UniverOOP/internal/app/store"
-	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 	"github.com/sirupsen/logrus"
@@ -91,7 +90,6 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) configureRouter() {
-	s.router.Use(handlers.CORS(handlers.AllowedOrigins([]string{"*"})))
 
 	s.router.HandleFunc("/register", s.handlerRegisterRequest()).Methods("POST")
 	s.router.HandleFunc("/login", s.handlerLoginRequest()).Methods("POST")
