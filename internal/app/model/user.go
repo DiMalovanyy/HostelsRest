@@ -25,6 +25,7 @@ type User struct {
 	Sex       Sex `json:"-"`
 	RoomId    int `json:"-"`
 	FacultyId int `json:"-"`
+	Grade     int `json:"-"`
 }
 
 func (u *User) Validate() error {

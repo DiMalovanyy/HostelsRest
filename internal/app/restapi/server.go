@@ -8,6 +8,7 @@ import (
 
 	"github.com/UniverOOP/internal/app/model"
 	"github.com/UniverOOP/internal/app/store"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 	"github.com/sirupsen/logrus"
@@ -90,17 +91,18 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) configureRouter() {
+	s.router.Use(handlers.CORS(handlers.AllowedOrigins([]string{"*"})))
 
 	s.router.HandleFunc("/register", s.handlerRegisterRequest()).Methods("POST")
 	s.router.HandleFunc("/login", s.handlerLoginRequest()).Methods("POST")
 
 	s.router.HandleFunc("/faculty_hostels", s.handlerFacultyHostles()).Methods("GET")
 	s.router.HandleFunc("/faculties", s.handlerGetAllFaculties()).Methods("GET")
-	s.router.HandleFunc("/hostel_room_members", s.handleHostelRoomMembers()).Methods("GET")
 	s.router.HandleFunc("/user_status", s.handleGetUserStatus()).Methods("GET")
 
 	//When user authed
 	s.router.HandleFunc("/upgrade_user", s.handleUpgradeUserRequest()).Methods("POST")
+	s.router.HandleFunc("/hostel_room_members", s.handleHostelRoomMembers()).Methods("GET")
 }
 
 func (s *server) handlerLoginRequest() http.HandlerFunc {
@@ -257,7 +259,24 @@ func (s *server) handleHostelRoomMembers() http.HandlerFunc {
 }
 
 func (s *server) handleUpgradeUserRequest() http.HandlerFunc {
+
+	type request struct {
+		DegreeLevel int    `json:"degreeLevel"`
+		Sex         string `json:"sex"`
+		FacultyName string `json:"facultyName"`
+	}
+
 	return func(rw http.ResponseWriter, r *http.Request) {
+		req := &request{}
+		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
+			s.error(rw, r, http.StatusBadRequest, err)
+			return
+		}
+
+		_, err := s.store.Faculty().GetFacultyByName(req.FacultyName)
+		if err != nil {
+			s.error(rw, r, http.StatusInternalServerError, err)
+		}
 
 	}
 }

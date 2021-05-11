@@ -67,9 +67,10 @@ func TestUserRepo_Upgrade(t *testing.T) {
 	sex := model.MEN
 	roomId := 1
 	facultyId := 1
+	grade := 1
 
-	assert.EqualError(t, repo.Upgrade(0, sex, roomId, facultyId), store.ErrRecordNotFound.Error())
-	assert.NoError(t, repo.Upgrade(u.Id, sex, roomId, facultyId))
+	assert.EqualError(t, repo.Upgrade(0, sex, roomId, facultyId, grade), store.ErrRecordNotFound.Error())
+	assert.NoError(t, repo.Upgrade(u.Id, sex, roomId, facultyId, grade))
 
 	u, _ = repo.FindById(u.Id)
 

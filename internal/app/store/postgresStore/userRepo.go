@@ -96,7 +96,7 @@ func (repo *UserRepo) FindById(id int) (*model.User, error) {
 	return u, nil
 }
 
-func (repo *UserRepo) Upgrade(userId int, sex model.Sex, roomId int, facultyId int) error {
+func (repo *UserRepo) Upgrade(userId int, sex model.Sex, roomId int, facultyId int, grade int) error {
 
 	u, err := repo.FindById(userId)
 	if err != nil {
@@ -104,11 +104,12 @@ func (repo *UserRepo) Upgrade(userId int, sex model.Sex, roomId int, facultyId i
 	}
 
 	if err := repo.store.db.QueryRow(
-		"UPDATE users SET sex = $1, room_id = $2, faculty_id = $3 WHERE id = $4 RETURNING sex, room_id, faculty_id",
-		sex, roomId, facultyId, userId).Scan(
+		"UPDATE users SET sex = $1, room_id = $2, faculty_id = $3, grade = $4 WHERE id = $5 RETURNING sex, room_id, faculty_id, grade",
+		sex, roomId, facultyId, grade, userId).Scan(
 		&u.Sex,
 		&u.RoomId,
 		&u.FacultyId,
+		&u.Grade,
 	); err != nil {
 		return err
 	}

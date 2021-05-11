@@ -7,7 +7,7 @@ type UserRepo interface {
 	FindByName(string) (*model.User, error)
 	FindByEmail(string) (*model.User, error)
 	FindById(int) (*model.User, error)
-	Upgrade(int, model.Sex, int, int) error
+	Upgrade(int, model.Sex, int, int, int) error
 
 	// GetUsersByRoomId() ([]*model.User, error)
 }
