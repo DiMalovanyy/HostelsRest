@@ -25,7 +25,6 @@ func Start(config *Config) error {
 	if err != nil {
 		return err
 	}
-
 	corServ := cors.Default().Handler(serv)
 	return http.ListenAndServe(config.BindAddress, corServ)
 }

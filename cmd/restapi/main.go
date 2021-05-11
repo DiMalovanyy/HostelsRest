@@ -23,9 +23,10 @@ func main() {
 	_, err := toml.DecodeFile(configPath, config)
 
 	port := os.Getenv("PORT")
-	config.BindAddress = ":" + port
-
-	log.Print(config.BindAddress)
+	if port != "" { // for heroku
+		config.BindAddress = ":" + port
+		config.DatabaseURL = "postgres://pzsumgcucebrbb:675b162b381c16af13becd943e26f926a74fd5e095204d2031031c1f717d40d3@ec2-54-90-211-192.compute-1.amazonaws.com:5432/dbfsp44r075phg"
+	}
 
 	if err != nil {
 		log.Fatal(err)
