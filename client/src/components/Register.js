@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 import axios from 'axios'
 
@@ -18,6 +18,8 @@ const Register = () => {
    })
 
    const { name, email, password, password2 } = formData
+
+   const history = useHistory()
 
    const clearNotification = () => {
       setNotification({ active: false, message: '', className: '' })
@@ -69,6 +71,8 @@ const Register = () => {
             }
             
             showNotification('Profile created', 'notification-success')
+
+            setTimeout(() => history.push('/login'), 2000)
          }
          catch (error) {
             console.log(error)
