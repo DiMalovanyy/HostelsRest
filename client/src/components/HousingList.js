@@ -30,19 +30,21 @@ const HousingList = () => {
 
    const [items, setItems] = useState([])
 
-   const handleClick = () => {
-      setOpen(!open)
+   const handleClick = (faculty) => {
+      //setOpen(!open)
+      setItems(items.map(item => item.faculty_name === faculty.faculty_name ?
+         ({...item, open: !item.open }) : item))
    }
 
    useEffect(() => {
       try {
          (async () => {
             const housings = await getAllHousings()
-            setItems(housings)
+            setItems(housings.map(item => ({ ...item, open: false })))
          })()
       }
       catch (error) {
-         console.log('couldnt get data')
+         console.log('Network error')
       }
    }, [])
 
@@ -59,12 +61,27 @@ const HousingList = () => {
          className={classes.root}
       >
          {items.map((item, i) => (
-            <ListItem key={i} button onClick={handleClick}>
-               <ListItemIcon>
-                  <SendIcon />
-               </ListItemIcon>
-               <ListItemText primary={item.faculty_name} />
-            </ListItem>
+            <div key={i}>
+               <ListItem button onClick={() => handleClick(item)}>
+                  <ListItemIcon>
+                     <SendIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={item.faculty_name} />
+                  {item.open ? <ExpandLess /> : <ExpandMore />}
+               </ListItem>
+               <Collapse in={item.open} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                     {item.housings && item.housings.map(housing => (
+                        <ListItem button className={classes.nested}>
+                           <ListItemIcon>
+                           <StarBorder />
+                           </ListItemIcon>
+                           <ListItemText primary={housing.hostel_name} />
+                        </ListItem>
+                     ))}
+                  </List>
+               </Collapse>
+            </div>
          ))}
       </List>
      )
