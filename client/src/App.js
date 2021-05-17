@@ -7,7 +7,7 @@ import Register from './components/Register'
 import Login from './components/Login'
 import MyHousing from './components/MyHousing'
 import PrivateRoute from './components/routing/PrivateRoute'
-import { getStudentStatus } from '../service/data'
+import { getStudentStatus } from './service/data'
 
 import './App.css'
 
@@ -21,7 +21,7 @@ const App = () => {
       login()
    }, [])
 
-   const login = () => { 
+   const login = async () => { 
       const status = await getStudentStatus()
       if (status !== null) {
          setAuth({
@@ -37,7 +37,7 @@ const App = () => {
       }
    }
 
-   const logout = () => {
+   const logout = async () => {
       try {
          const res = await axios.get('http://localhost:8080/private/logout', { withCredentials: true })
       }
