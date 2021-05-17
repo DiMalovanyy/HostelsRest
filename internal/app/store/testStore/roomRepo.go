@@ -33,3 +33,21 @@ func (r *RoomRepo) GetAllRoomsByHostleId(hostelId int) ([]*model.Room, error) {
 	}
 	return rooms, nil
 }
+
+//TODO: TestCases
+func (r *RoomRepo) GetFreeRoomByHostelId(hostelId int) (int, error) {
+
+	rooms, err := r.GetAllRoomsByHostleId(hostelId)
+	if err != nil {
+		return 0, err
+	}
+
+	for _, room := range rooms {
+		if room.FreeCapacity > 0 {
+			room.FreeCapacity -= 1
+			return room.Id, nil
+		}
+	}
+
+	return 0, store.ErrNoData
+}

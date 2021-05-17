@@ -55,7 +55,6 @@ func (repo *UserRepo) FindById(id int) (*model.User, error) {
 }
 
 func (repo *UserRepo) Upgrade(userId int, sex model.Sex, roomId int, facultyId int, grade int) error {
-	//Todo validation
 
 	u, err := repo.FindById(userId)
 	if err != nil {

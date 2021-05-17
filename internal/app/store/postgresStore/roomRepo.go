@@ -45,3 +45,26 @@ func (r *RoomRepo) GetAllRoomsByHostleId(hostelId int) ([]*model.Room, error) {
 	}
 	return rooms, nil
 }
+
+func (r *RoomRepo) GetFreeRoomByHostelId(hostelId int) (int, error) {
+
+	rooms, err := r.GetAllRoomsByHostleId(hostelId)
+	if err != nil {
+		return 0, err
+	}
+
+	for _, room := range rooms {
+		if room.FreeCapacity > 0 {
+			room.FreeCapacity -= 1
+			var roomReturnId int
+			err := r.store.db.QueryRow("UPDATE rooms SET free_capacity = $1 WHERE id = $2 RETURNING id", room.FreeCapacity, room.Id).Scan(&roomReturnId)
+			if err != nil {
+				return 0, err
+			}
+			return roomReturnId, nil
+		}
+
+	}
+
+	return 0, store.ErrNoData
+}
