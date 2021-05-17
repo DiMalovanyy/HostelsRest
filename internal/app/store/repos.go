@@ -28,4 +28,5 @@ type RoomRepo interface {
 	CreateRoom(*model.Room) error
 	//Return all roms that located in the same hostelId
 	GetAllRoomsByHostleId(int) ([]*model.Room, error)
+	GetFreeRoomByHostelId(int) (int, error)
 }
