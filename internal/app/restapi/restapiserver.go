@@ -25,7 +25,13 @@ func Start(config *Config) error {
 	if err != nil {
 		return err
 	}
-	corServ := cors.Default().Handler(serv)
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost", "http://localhost:3000"},
+		AllowCredentials: true,
+		// Enable Debugging for testing, consider disabling in production
+		Debug: true,
+	})
+	corServ := c.Handler(serv)
 	return http.ListenAndServe(config.BindAddress, corServ)
 }
 
