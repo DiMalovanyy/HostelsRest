@@ -23,7 +23,7 @@ func Start(config *Config) error {
 
 	sessionStore.Options = &sessions.Options{
 		SameSite: http.SameSiteDefaultMode,
-		Path:     "/",
+		// Path:     "/",
 		HttpOnly: false,
 		Secure:   false,
 		MaxAge:   2592000,
