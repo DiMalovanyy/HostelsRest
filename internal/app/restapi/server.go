@@ -138,6 +138,7 @@ func (s *server) handlerLoginRequest() http.HandlerFunc {
 			return
 		}
 
+		rw.Header().Add("access-control-expose-headers", "Set-Cookie")
 		s.respond(rw, r, http.StatusOK, nil)
 	}
 }
