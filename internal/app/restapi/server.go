@@ -39,12 +39,6 @@ type server struct {
 func (s *server) authenticateUser(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		session, err := s.sessionStore.Get(r, sessionName)
-		// session.Options = &sessions.Options{
-		// 	SameSite: http.SameSiteLaxMode,
-		// 	Path:     "/some",
-		// 	HttpOnly: false,
-		// 	Secure:   false,
-		// }
 		if err != nil {
 			s.error(w, r, http.StatusInternalServerError, err)
 			return
@@ -133,12 +127,7 @@ func (s *server) handlerLoginRequest() http.HandlerFunc {
 		}
 
 		session, err := s.sessionStore.Get(r, sessionName)
-		// session.Options = &sessions.Options{
-		// 	SameSite: http.SameSiteLaxMode,
-		// 	Path:     "/",
-		// 	HttpOnly: false,
-		// 	Secure:   false,
-		// }
+
 		if err != nil {
 			s.error(rw, r, http.StatusInternalServerError, err)
 			return

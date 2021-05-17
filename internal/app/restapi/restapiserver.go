@@ -26,6 +26,7 @@ func Start(config *Config) error {
 		Path:     "/",
 		HttpOnly: false,
 		Secure:   false,
+		MaxAge:   2592000,
 	}
 	serv, err := NewServer(config.LogLevel, store, sessionStore)
 	if err != nil {
