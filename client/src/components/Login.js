@@ -56,9 +56,6 @@ const Login = ({ onLogIn, auth: { loggedIn } }) => {
             }
 
             onLogIn()
-            
-            // Navigate to the home page once logged in
-            //history.push('/')
          }
          catch (error) {
             if (error.response && error.response.data.error)

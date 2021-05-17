@@ -11,7 +11,7 @@ import HouseIcon from '@material-ui/icons/House'
 import ExpandLess from '@material-ui/icons/ExpandLess'
 import ExpandMore from '@material-ui/icons/ExpandMore'
 
-import { getAllHousings, getFaculties } from '../service/data'
+import { getAllHousings } from '../service/data'
 
 const useStyles = makeStyles((theme) => ({
   root: {

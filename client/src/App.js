@@ -10,7 +10,6 @@ import PrivateRoute from './components/routing/PrivateRoute'
 import './App.css'
 
 const App = () => {
-   const [status, setStatus] = useState('new')
    const [auth, setAuth] = useState({
       loggedIn: false,
       loading: true
@@ -39,7 +38,7 @@ const App = () => {
                <section className="container">
                   <Route exact path="/register" render={() => <Register auth={auth}/>} />
                   <Route exact path="/login" render={() => <Login onLogIn={login} auth={auth}/>} />
-                  <PrivateRoute exact path="/myhousing" component={MyHousing} auth={auth} status={status} />
+                  <PrivateRoute exact path="/myhousing" component={MyHousing} auth={auth}/>
                </section>
             </Route>
          </Switch>

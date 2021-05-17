@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
 import axios from 'axios'
-import { getFaculties } from '../service/data'
+import { getFaculties, getStudentStatus } from '../service/data'
 
-const MyHousing = ({ status }) => {
+const MyHousing = () => {
    const [formData, setFormData] = useState({
       degreeLevel: '',
       sex: '',
       facultyName: ''
    })
+
+   const [status, setStatus] = useState(false)
 
    const [hostel, setHostel] = useState({
       hostelName: '',
@@ -23,6 +24,8 @@ const MyHousing = ({ status }) => {
       (async () => {
          const data = await getFaculties()
          setFaculties(data)
+         const studStatus = await getStudentStatus()
+         if (studStatus) setStatus(studStatus)
       })()
    }, [])
 
@@ -45,7 +48,7 @@ const MyHousing = ({ status }) => {
    return (
       <section id="my-housing">
          <h1 className="large text-primary">My Housing</h1>
-         {status === 'new' && (
+         {!status ? (
             <>
                <h2 className="lead text-primary">Apply for Housing</h2>
                <form className="form" onSubmit={e => onSubmit(e)}>
@@ -76,13 +79,15 @@ const MyHousing = ({ status }) => {
                   <input type="submit" className="btn btn-primary" value="Submit" />
                </form>
             </>
-         )}
+         ) : (
+            <>
+               <h2 className="lead text-primary">List of Rooms</h2>
+
+            </>
+         )
+      }
       </section>
    )
-}
-
-MyHousing.propTypes = {
-   status: PropTypes.string.isRequired
 }
 
 export default MyHousing

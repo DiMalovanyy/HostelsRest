@@ -14,7 +14,7 @@ const Navbar = ({ loggedIn, logout, history }) => {
          <ul>
             <li><Link to="/myhousing">My Housing</Link></li>
             {loggedIn ? (
-               <li><a onClick={onLogOut} style={{cursor: 'pointer'}}>Log Out</a></li>
+               <li><a href="#!" onClick={onLogOut} style={{cursor: 'pointer'}}>Log Out</a></li>
             ) : (
                <>
                   <li><Link to="/register">Register</Link></li>
