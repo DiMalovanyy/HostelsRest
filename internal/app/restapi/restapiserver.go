@@ -22,10 +22,10 @@ func Start(config *Config) error {
 	sessionStore := sessions.NewCookieStore([]byte(config.SessionKey))
 
 	sessionStore.Options = &sessions.Options{
-		// SameSite: http.SameSiteNoneMode,
+		SameSite: http.SameSiteLaxMode,
 		Path:     "/",
 		HttpOnly: false,
-		Secure:   false,
+		Secure:   true,
 		MaxAge:   2592000,
 		Domain:   "https://pacific-escarpment-18341.herokuapp.com/",
 	}
