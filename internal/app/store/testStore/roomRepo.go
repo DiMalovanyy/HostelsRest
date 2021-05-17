@@ -51,3 +51,8 @@ func (r *RoomRepo) GetFreeRoomByHostelId(hostelId int) (int, error) {
 
 	return 0, store.ErrNoData
 }
+
+func (r *RoomRepo) GetRoomByRoomId(roomId int) (*model.Room, error) {
+
+	return nil, nil
+}

@@ -1,6 +1,8 @@
 package postgresStore
 
 import (
+	"database/sql"
+
 	"github.com/UniverOOP/internal/app/model"
 	"github.com/UniverOOP/internal/app/store"
 )
@@ -67,4 +69,24 @@ func (r *RoomRepo) GetFreeRoomByHostelId(hostelId int) (int, error) {
 	}
 
 	return 0, store.ErrNoData
+}
+
+func (r *RoomRepo) GetRoomByRoomId(roomId int) (*model.Room, error) {
+	room := &model.Room{}
+
+	if err := r.store.db.QueryRow(
+		"SELECT id, number, capacity, free_capacity, hostel_id, room_sex FROM rooms WHERE id = $1", roomId).Scan(
+		&room.Id,
+		&room.Number,
+		&room.Capacity,
+		&room.FreeCapacity,
+		&room.HostelId,
+		&room.RoomSex,
+	); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, store.ErrRecordNotFound
+		}
+		return nil, err
+	}
+	return room, nil
 }

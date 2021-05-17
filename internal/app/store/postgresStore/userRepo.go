@@ -119,3 +119,40 @@ func (repo *UserRepo) Upgrade(userId int, sex model.Sex, roomId int, facultyId i
 
 	return nil
 }
+
+func (repo *UserRepo) GetAllUsersByRoomId(roomId int) ([]*model.User, error) {
+	users := make([]*model.User, 0)
+
+	rows, err := repo.store.db.Query(
+		"SELECT id, name, email, encrypted_password, sex, room_id, grade, faculty_id FROM users WHERE room_id = $1", roomId)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		user := &model.User{}
+		if err := rows.Scan(
+			&user.Id,
+			&user.Name,
+			&user.Email,
+			&user.EncryptedPassword,
+			&user.Sex,
+			&user.RoomId,
+			&user.Grade,
+			&user.FacultyId,
+		); err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	if len(users) == 0 {
+		return nil, store.ErrEmptyData
+	}
+
+	return users, nil
+}

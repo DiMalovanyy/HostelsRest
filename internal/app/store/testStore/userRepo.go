@@ -69,3 +69,9 @@ func (repo *UserRepo) Upgrade(userId int, sex model.Sex, roomId int, facultyId i
 
 	return nil
 }
+
+//TODO: reqrite it for testing
+func (repo *UserRepo) GetAllUsersByRoomId(roomId int) ([]*model.User, error) {
+
+	return nil, nil
+}
