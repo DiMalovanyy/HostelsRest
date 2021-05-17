@@ -28,6 +28,7 @@ const HousingList = () => {
    const classes = useStyles()
 
    const [items, setItems] = useState([])
+   const [loading, setLoading] = useState(true)
 
    const handleClick = (faculty) => {
       setItems(items.map(item => item.faculty_name === faculty.faculty_name ?
@@ -40,53 +41,57 @@ const HousingList = () => {
             const housings = await getAllHousings()
             setItems(housings.map(item => ({ ...item, open: false })))
          })()
+         setLoading(false)
       }
       catch (error) {
          console.log('Network error')
+         setLoading(false)
       }
    }, [])
 
-  if (items && items.length > 0) {
-     return (
-      <List
-         component="nav"
-         aria-labelledby="nested-list-subheader"
-         subheader={
-         <ListSubheader component="div" id="nested-list-subheader">
-            Faculties
-         </ListSubheader>
-         }
-         className={classes.root}
-      >
-         {items.map((item, i) => (
-            <div key={i}>
-               <ListItem button onClick={() => handleClick(item)}>
-                  <ListItemIcon>
-                     <SendIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={item.faculty_name} />
-                  {item.open ? <ExpandLess /> : <ExpandMore />}
-               </ListItem>
-               <Collapse in={item.open} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding>
-                     {item.housings && item.housings.map((housing, j) => (
-                        <ListItem key={j+10} button className={classes.nested}>
-                           <ListItemIcon>
-                              <HouseIcon />
-                           </ListItemIcon>
-                           <ListItemText primary={housing.hostel_name} />
-                        </ListItem>
-                     ))}
-                  </List>
-               </Collapse>
-            </div>
-         ))}
-      </List>
-     )
-  }
-  else {
-     return <h2>No data</h2>
-  }
+   if (loading) return <h2>Loading...</h2>
+
+   if (items && items.length > 0) {
+      return (
+         <List
+            component="nav"
+            aria-labelledby="nested-list-subheader"
+            subheader={
+            <ListSubheader component="div" id="nested-list-subheader">
+               Faculties
+            </ListSubheader>
+            }
+            className={classes.root}
+         >
+            {items.map((item, i) => (
+               <div key={i}>
+                  <ListItem button onClick={() => handleClick(item)}>
+                     <ListItemIcon>
+                        <SendIcon />
+                     </ListItemIcon>
+                     <ListItemText primary={item.faculty_name} />
+                     {item.open ? <ExpandLess /> : <ExpandMore />}
+                  </ListItem>
+                  <Collapse in={item.open} timeout="auto" unmountOnExit>
+                     <List component="div" disablePadding>
+                        {item.housings && item.housings.map((housing, j) => (
+                           <ListItem key={j+10} button className={classes.nested}>
+                              <ListItemIcon>
+                                 <HouseIcon />
+                              </ListItemIcon>
+                              <ListItemText primary={housing.hostel_name} />
+                           </ListItem>
+                        ))}
+                     </List>
+                  </Collapse>
+               </div>
+            ))}
+         </List>
+      )
+   }
+   else {
+      return <h2>No data</h2>
+   }
 }
 
 export default HousingList
