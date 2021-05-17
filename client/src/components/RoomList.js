@@ -58,7 +58,7 @@ const RoomList = () => {
             aria-labelledby="nested-list-subheader"
             subheader={
             <ListSubheader component="div" id="nested-list-subheader">
-               {items.hostel_name} rooms:
+               Hostel {items.hostel_name} rooms:
             </ListSubheader>
             }
             className={classes.root}

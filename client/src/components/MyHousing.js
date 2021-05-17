@@ -10,7 +10,7 @@ const MyHousing = () => {
       facultyName: ''
    })
 
-   const [status, setStatus] = useState(false)
+   const [status, setStatus] = useState(null)
 
    const [hostel, setHostel] = useState({
       hostelName: '',
@@ -27,6 +27,7 @@ const MyHousing = () => {
          setFaculties(data)
          const studStatus = await getStudentStatus()
          if (studStatus) setStatus(studStatus)
+         setLoading(false)
       })()
    }, [])
 
@@ -37,9 +38,11 @@ const MyHousing = () => {
 
       try {
          const res = await axios.post('http://localhost:8080/private/upgrade_user',
-         { degreeLevel: parseInt(degreeLevel), sex, facultyName })
+         { degreeLevel: parseInt(degreeLevel), sex, facultyName }, {withCredentials: true})
          
-         console.log('done', res)
+         if (res.status === 200) setStatus(true)
+
+         // TODO error message
       }
       catch (error) {
          console.log(error)
@@ -49,7 +52,7 @@ const MyHousing = () => {
    return (
       <section id="my-housing">
          <h1 className="large text-primary">My Housing</h1>
-         {!status ? (
+         {status === false ? (
             <>
                <h2 className="lead text-primary">Apply for Housing</h2>
                <form className="form" onSubmit={e => onSubmit(e)}>
@@ -80,12 +83,12 @@ const MyHousing = () => {
                   <input type="submit" className="btn btn-primary" value="Submit" />
                </form>
             </>
-         ) : (
+         ) : (status === true && (
             <>
                <h2 className="lead text-primary">List of Rooms</h2>
                <RoomList />
             </>
-         )
+         ))
       }
       </section>
    )
