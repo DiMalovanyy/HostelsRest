@@ -40,8 +40,8 @@ const HousingList = () => {
          (async () => {
             const housings = await getAllHousings()
             setItems(housings.map(item => ({ ...item, open: false })))
+            setLoading(false)
          })()
-         setLoading(false)
       }
       catch (error) {
          console.log('Network error')
