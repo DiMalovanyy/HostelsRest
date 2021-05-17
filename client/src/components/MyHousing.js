@@ -11,11 +11,6 @@ const MyHousing = () => {
    })
 
    const [status, setStatus] = useState(null)
-
-   const [hostel, setHostel] = useState({
-      hostelName: '',
-      rooms: []
-   })
    
    const [faculties, setFaculties] = useState([])
 
@@ -27,7 +22,6 @@ const MyHousing = () => {
          setFaculties(data)
          const studStatus = await getStudentStatus()
          if (studStatus) setStatus(studStatus)
-         setLoading(false)
       })()
    }, [])
 
