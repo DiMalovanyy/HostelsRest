@@ -21,6 +21,12 @@ func Start(config *Config) error {
 	store := postgresStore.New(db)
 	sessionStore := sessions.NewCookieStore([]byte(config.SessionKey))
 
+	sessionStore.Options = &sessions.Options{
+		SameSite: http.SameSiteLaxMode,
+		Path:     "/",
+		HttpOnly: false,
+		Secure:   false,
+	}
 	serv, err := NewServer(config.LogLevel, store, sessionStore)
 	if err != nil {
 		return err
