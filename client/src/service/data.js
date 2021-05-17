@@ -20,3 +20,15 @@ export const getStudentStatus = async () => {
    }
    catch(error) { return null }
 }
+
+export const getHousingRooms = async () => {
+   try {
+      const res = await axios.get('http://localhost:8080/private/hostel_room_members',
+      {withCredentials: true})
+
+      if (res.status !== 200) return null
+
+      return res.data
+   }
+   catch (error) { return null }
+}

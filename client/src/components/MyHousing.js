@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { getFaculties, getStudentStatus } from '../service/data'
+import RoomList from './RoomList'
 
 const MyHousing = () => {
    const [formData, setFormData] = useState({
@@ -82,7 +83,7 @@ const MyHousing = () => {
          ) : (
             <>
                <h2 className="lead text-primary">List of Rooms</h2>
-
+               <RoomList />
             </>
          )
       }
