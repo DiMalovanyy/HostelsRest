@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 
 import axios from 'axios'
 
-const Register = () => {
+const Register = ({ onLogIn, auth: { loggedIn } }) => {
    const [formData, setFormData] = useState({
       name: '',
       email: '',
@@ -18,8 +18,6 @@ const Register = () => {
    })
 
    const { name, email, password, password2 } = formData
-
-   const history = useHistory()
 
    const clearNotification = () => {
       setNotification({ active: false, message: '', className: '' })
@@ -71,8 +69,6 @@ const Register = () => {
             }
             
             showNotification('Profile created', 'notification-success')
-
-            setTimeout(() => history.push('/login'), 2000)
          }
          catch (error) {
             if (error.response.data.error)
@@ -82,6 +78,8 @@ const Register = () => {
          }
       }
    }
+
+   if (loggedIn) return <Redirect to="/myhousing" />
 
    return (
       <>

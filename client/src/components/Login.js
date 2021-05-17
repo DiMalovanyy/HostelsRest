@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { Link, useHistory, Redirect } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import axios from 'axios'
 
-const Login = ({ onLogIn }) => {
+const Login = ({ onLogIn, auth: { loggedIn } }) => {
    const [formData, setFormData] = useState({
       email: '',
       password: ''
@@ -15,8 +15,6 @@ const Login = ({ onLogIn }) => {
    })
 
    const { email, password } = formData
-
-   const history = useHistory()
 
    const clearNotification = () => {
       setNotification({ active: false, message: '', className: '' })
@@ -61,7 +59,6 @@ const Login = ({ onLogIn }) => {
             
             // Navigate to the home page once logged in
             //history.push('/')
-            return <Redirect to="/myhousing" />
          }
          catch (error) {
             if (error.response.data.error)
@@ -71,6 +68,8 @@ const Login = ({ onLogIn }) => {
          }
       }
    }
+
+   if (loggedIn) return <Redirect to="/myhousing" />
 
    return (
       <>

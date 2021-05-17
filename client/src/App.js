@@ -5,11 +5,11 @@ import Home from './components/Home'
 import Register from './components/Register'
 import Login from './components/Login'
 import MyHousing from './components/MyHousing'
+import PrivateRoute from './components/routing/PrivateRoute'
 
 import './App.css'
 
 const App = () => {
-   //const [view, setView] = useState('default')
    const [status, setStatus] = useState('new')
    const [auth, setAuth] = useState({
       loggedIn: false,
@@ -31,8 +31,8 @@ const App = () => {
             <Route path="/">
                <section className="container">
                   <Route exact path="/register" component={Register} />
-                  <Route exact path="/login" render={() => <Login onLogIn={login} />} />
-                  <Route exact path="/myhousing" render={() => <MyHousing status={status} />} />
+                  <Route exact path="/login" render={() => <Login onLogIn={login} auth={auth}/>} />
+                  <PrivateRoute exact path="/myhousing" component={MyHousing} auth={auth} status={status} />
                </section>
             </Route>
          </Switch>
