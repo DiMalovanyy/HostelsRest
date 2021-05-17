@@ -6,5 +6,5 @@ type Room struct {
 	Capacity     int    `json:"capacity"`
 	FreeCapacity int    `json:"free_capacity"`
 	HostelId     int    `json:"hostel_id"`
-	RoomSex      Sex    `json:"room_sex"`
+	RoomSex      string `json:"room_sex"`
 }

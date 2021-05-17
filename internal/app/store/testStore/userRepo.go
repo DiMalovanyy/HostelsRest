@@ -20,6 +20,7 @@ func (repo *UserRepo) CreateUser(user *model.User) error {
 
 	user.Id = len(repo.userById) + 1
 	user.Sex = model.UNDEFINED
+	user.Grade = 0
 	user.RoomId = 0
 	user.FacultyId = 0
 	repo.userById[user.Id] = user

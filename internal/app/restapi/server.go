@@ -127,6 +127,7 @@ func (s *server) handlerLoginRequest() http.HandlerFunc {
 		}
 
 		session, err := s.sessionStore.Get(r, sessionName)
+
 		if err != nil {
 			s.error(rw, r, http.StatusInternalServerError, err)
 			return
@@ -137,6 +138,7 @@ func (s *server) handlerLoginRequest() http.HandlerFunc {
 			return
 		}
 
+		rw.Header().Add("access-control-expose-headers", "Set-Cookie")
 		s.respond(rw, r, http.StatusOK, nil)
 	}
 }
@@ -315,7 +317,7 @@ func (s *server) handleUpgradeUserRequest() http.HandlerFunc {
 
 			roomId, err := s.store.Room().GetFreeRoomByHostelId(hostel.Id)
 			if err != nil {
-				if err == store.ErrNoData {
+				if err == store.ErrNoData || err == store.ErrEmptyData {
 					continue
 				} else {
 					s.error(rw, r, http.StatusInternalServerError, err)
