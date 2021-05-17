@@ -38,9 +38,15 @@ const HousingList = () => {
    useEffect(() => {
       try {
          (async () => {
-            const housings = await getAllHousings()
-            setItems(housings.map(item => ({ ...item, open: false })))
-            setLoading(false)
+            try {
+               const housings = await getAllHousings()
+               setItems(housings.map(item => ({ ...item, open: false })))
+               setLoading(false)
+            }
+            catch (error) {
+               console.log('Network error')
+               setLoading(false)
+            }   
          })()
       }
       catch (error) {

@@ -37,10 +37,16 @@ const RoomList = () => {
 
    useEffect(() => {
       try {
-         (async () => {
-            const hostel = await getHousingRooms()
-            setItems(hostel)
-            setLoading(false)
+         (async () => { 
+            try {
+               const hostel = await getHousingRooms()
+               setItems(hostel)
+               setLoading(false)
+            }
+            catch (error) {
+               console.log('Network error')
+               setLoading(false)
+            }
          })()
       }
       catch (error) {

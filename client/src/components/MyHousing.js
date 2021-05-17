@@ -14,6 +14,23 @@ const MyHousing = () => {
    
    const [faculties, setFaculties] = useState([])
 
+   const [notification, setNotification] = useState({
+      active: false,
+      message: '',
+      className: ''
+   })
+
+   const clearNotification = () => {
+      setNotification({ active: false, message: '', className: '' })
+   }
+
+   const showNotification = (message, className) => {
+      clearNotification()
+      setNotification({ active: true, message, className })
+      setTimeout(() => clearNotification(), 4000)
+   }
+
+
    const { degreeLevel, sex, facultyName } = formData
 
    useEffect(() => {
@@ -37,9 +54,13 @@ const MyHousing = () => {
          const res = await axios.post('http://localhost:8080/private/upgrade_user',
          { degreeLevel: parseInt(degreeLevel), sex, facultyName }, {withCredentials: true})
          
-         if (res.status === 200) setStatus(true)
+         if (!res.status === 200) {
+            showNotification(`Response status: ${res.status}`, 'notification-error')
+            return
+         }
 
          // TODO error message
+         setStatus(true)
       }
       catch (error) {
          console.log(error)
@@ -49,6 +70,11 @@ const MyHousing = () => {
    return (
       <section id="my-housing">
          <h1 className="large text-primary">My Housing</h1>
+         {notification.active &&
+            <div className={`notification ${notification.className}`}>
+               {notification.message}
+            </div>
+         }
          {status === false ? (
             <>
                <h2 className="lead text-primary">Apply for Housing</h2>
