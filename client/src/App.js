@@ -23,14 +23,21 @@ const App = () => {
       })
    }
 
+   const logout = () => {
+      setAuth({
+         loggedIn: false,
+         loading: false
+      })
+   }
+
    return (
       <Router>
-         <Navbar />
+         <Navbar loggedIn={auth.loggedIn} logout={logout} />
          <Switch>
             <Route exact path="/" render={() => <Home />} />
             <Route path="/">
                <section className="container">
-                  <Route exact path="/register" component={Register} />
+                  <Route exact path="/register" render={() => <Register auth={auth}/>} />
                   <Route exact path="/login" render={() => <Login onLogIn={login} auth={auth}/>} />
                   <PrivateRoute exact path="/myhousing" component={MyHousing} auth={auth} status={status} />
                </section>

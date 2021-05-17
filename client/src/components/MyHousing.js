@@ -39,9 +39,10 @@ const MyHousing = ({ status }) => {
 
    return (
       <section id="my-housing">
+         <h1 className="large text-primary">My Housing</h1>
          {status === 'new' && (
             <>
-               <h1 className="large text-primary">Apply for Housing</h1>
+               <h2 className="lead text-primary">Apply for Housing</h2>
                <form className="form" onSubmit={e => onSubmit(e)}>
                   <div className="form-group">
                      <label htmlFor="degreeLevel">Degree Level:</label>
