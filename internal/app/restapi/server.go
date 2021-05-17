@@ -102,7 +102,7 @@ func (s *server) configureRouter() {
 
 	//When user authed
 	private := s.router.PathPrefix("/private").Subrouter()
-	private.Use(s.authenticateUser)
+	// private.Use(s.authenticateUser)
 	private.HandleFunc("/upgrade_user", s.handleUpgradeUserRequest()).Methods("POST")
 	private.HandleFunc("/hostel_room_members", s.handleHostelRoomMembers()).Methods("GET")
 }
