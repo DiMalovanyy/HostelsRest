@@ -71,7 +71,7 @@ const Register = ({ onLogIn, auth: { loggedIn } }) => {
             showNotification('Profile created', 'notification-success')
          }
          catch (error) {
-            if (error.response.data.error)
+            if (error.response && error.response.data.error)
                showNotification(error.response.data.error, 'notification-error')
             else
                showNotification(error.message, 'notification-error')
