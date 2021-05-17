@@ -25,9 +25,9 @@ func Start(config *Config) error {
 		SameSite: http.SameSiteLaxMode,
 		Path:     "/",
 		HttpOnly: false,
-		Secure:   true,
+		Secure:   false,
 		MaxAge:   2592000,
-		Domain:   "https://pacific-escarpment-18341.herokuapp.com/",
+		Domain:   "http://localhost:3000",
 	}
 	serv, err := NewServer(config.LogLevel, store, sessionStore)
 	if err != nil {
