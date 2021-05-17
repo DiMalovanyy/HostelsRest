@@ -21,7 +21,10 @@ const MyHousing = () => {
          const data = await getFaculties()
          setFaculties(data)
          const studStatus = await getStudentStatus()
-         if (studStatus) setStatus(studStatus)
+         if (studStatus)
+            setStatus(true)
+         else
+            setStatus(false)
       })()
    }, [])
 
