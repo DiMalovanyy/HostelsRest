@@ -9,6 +9,7 @@ type UserRepo interface {
 	FindById(int) (*model.User, error)
 	Upgrade(int, model.Sex, int, int, int) error
 
+	GetAllUsersByRoomId(int) ([]*model.User, error)
 	// GetUsersByRoomId() ([]*model.User, error)
 }
 
@@ -16,6 +17,7 @@ type HostelRepo interface {
 	CreateHostel(*model.Hostel) error
 	GetHostelsByFucultyId(int) ([]*model.Hostel, error)
 	// GetHostelByName(string) (*model.Hostel, error)
+	GetHostelById(int) (*model.Hostel, error)
 }
 
 type FacultyRepo interface {
@@ -29,4 +31,5 @@ type RoomRepo interface {
 	//Return all roms that located in the same hostelId
 	GetAllRoomsByHostleId(int) ([]*model.Room, error)
 	GetFreeRoomByHostelId(int) (int, error)
+	GetRoomByRoomId(int) (*model.Room, error)
 }

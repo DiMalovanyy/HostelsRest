@@ -24,7 +24,7 @@ var (
 	errHostelsNotFound          = errors.New("hostels for faulty not found")
 	errNoFreeRooms              = errors.New("no free rooms in faculty")
 	errIncorrectSex             = errors.New("incorrect request sex")
-	errUserNotSetteled          = errors.New("user not settled")
+	// errUserNotSetteled          = errors.New("user not settled")
 )
 
 type ctxKey int8
@@ -104,6 +104,7 @@ func (s *server) configureRouter() {
 	//When user authed
 	private := s.router.PathPrefix("/private").Subrouter()
 	private.Use(s.authenticateUser)
+	private.HandleFunc("/logout", s.handlerLogoutRequest()).Methods("GET")
 	private.HandleFunc("/upgrade_user", s.handleUpgradeUserRequest()).Methods("POST")
 	private.HandleFunc("/hostel_room_members", s.handleHostelRoomMembers()).Methods("GET")
 }
@@ -140,6 +141,24 @@ func (s *server) handlerLoginRequest() http.HandlerFunc {
 		}
 
 		rw.Header().Add("access-control-expose-headers", "Set-Cookie")
+		s.respond(rw, r, http.StatusOK, nil)
+	}
+}
+
+func (s *server) handlerLogoutRequest() http.HandlerFunc {
+
+	return func(rw http.ResponseWriter, r *http.Request) {
+		sessions, err := s.sessionStore.Get(r, sessionName)
+		if err != nil {
+			s.error(rw, r, http.StatusInternalServerError, err)
+			return
+		}
+
+		sessions.Options.MaxAge = -1
+		if err := s.sessionStore.Save(r, rw, sessions); err != nil {
+			s.error(rw, r, http.StatusInternalServerError, err)
+			return
+		}
 		s.respond(rw, r, http.StatusOK, nil)
 	}
 }
@@ -259,8 +278,59 @@ func (s *server) handleGetUserStatus() http.HandlerFunc {
 }
 
 func (s *server) handleHostelRoomMembers() http.HandlerFunc {
+
+	type Room struct {
+		RoomNumber string   `json:"room_number"`
+		Names      []string `json:"names"`
+	}
+
+	type Response struct {
+		HostelName string `json:"hostel_name"`
+		Rooms      []Room `json:"rooms"`
+	}
+
 	return func(rw http.ResponseWriter, r *http.Request) {
 
+		//Get current session user
+		currentUser, ok := r.Context().Value(ctxKeyUser).(*model.User)
+		if !ok {
+			s.error(rw, r, http.StatusInternalServerError, nil)
+		}
+
+		room, err := s.store.Room().GetRoomByRoomId(currentUser.RoomId)
+		if err != nil {
+			s.error(rw, r, http.StatusInternalServerError, err)
+		}
+
+		rooms, err := s.store.Room().GetAllRoomsByHostleId(room.HostelId)
+		if err != nil {
+			s.error(rw, r, http.StatusInternalServerError, err)
+		}
+
+		hostel, err := s.store.Hostel().GetHostelById(room.HostelId)
+		if err != nil {
+			s.error(rw, r, http.StatusInternalServerError, err)
+		}
+
+		// log.Print("Hostel: ", hostel.Description)
+
+		var response Response
+		response.HostelName = hostel.Description
+
+		for _, room = range rooms {
+			var currentRoom Room
+			currentRoom.RoomNumber = room.Number
+			users, err := s.store.User().GetAllUsersByRoomId(room.Id)
+			if err != nil && err != store.ErrEmptyData {
+				s.error(rw, r, http.StatusInternalServerError, err)
+			}
+			for _, user := range users {
+				currentRoom.Names = append(currentRoom.Names, user.Name)
+			}
+			response.Rooms = append(response.Rooms, currentRoom)
+		}
+
+		s.respond(rw, r, http.StatusOK, response)
 	}
 }
 
@@ -301,8 +371,6 @@ func (s *server) handleUpgradeUserRequest() http.HandlerFunc {
 		if !ok {
 			s.error(rw, r, http.StatusInternalServerError, nil)
 		}
-		s.logger.Info("UserName: %s", currentUser.Name)
-		s.logger.Info("Sex: %d", sex)
 
 		hostels, err := s.store.Hostel().GetHostelsByFucultyId(faculty.Id)
 		if err != nil {

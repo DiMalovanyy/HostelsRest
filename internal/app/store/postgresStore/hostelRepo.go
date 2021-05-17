@@ -1,6 +1,8 @@
 package postgresStore
 
 import (
+	"database/sql"
+
 	"github.com/UniverOOP/internal/app/model"
 	"github.com/UniverOOP/internal/app/store"
 )
@@ -43,4 +45,22 @@ func (h *HostelRepo) GetHostelsByFucultyId(fucultyId int) ([]*model.Hostel, erro
 		return nil, store.ErrEmptyData
 	}
 	return hostels, nil
+}
+
+func (h *HostelRepo) GetHostelById(hostelId int) (*model.Hostel, error) {
+	hostel := &model.Hostel{}
+
+	if err := h.store.db.QueryRow(
+		"SELECT id, description, faculty_id FROM hostels WHERE id = $1", hostelId,
+	).Scan(
+		&hostel.Id,
+		&hostel.Description,
+		&hostel.FacultyId,
+	); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, store.ErrRecordNotFound
+		}
+		return nil, err
+	}
+	return hostel, nil
 }

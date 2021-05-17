@@ -33,3 +33,8 @@ func (h *HostelRepo) GetHostelsByFucultyId(fucultyId int) ([]*model.Hostel, erro
 
 	return hostels, nil
 }
+
+func (h *HostelRepo) GetHostelById(hostelId int) (*model.Hostel, error) {
+
+	return nil, nil
+}
