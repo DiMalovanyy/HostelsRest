@@ -9,6 +9,11 @@ const MyHousing = ({ status }) => {
       sex: '',
       facultyName: ''
    })
+
+   const [hostel, setHostel] = useState({
+      hostelName: '',
+      rooms: []
+   })
    
    const [faculties, setFaculties] = useState([])
 
@@ -27,8 +32,8 @@ const MyHousing = ({ status }) => {
       event.preventDefault()
 
       try {
-         const res = await axios.post('https://pacific-escarpment-18341.herokuapp.com/upgrade_user',
-         { degreeLevel, sex, facultyName })
+         const res = await axios.post('https://pacific-escarpment-18341.herokuapp.com/private/upgrade_user',
+         { degreeLevel: parseInt(degreeLevel), sex, facultyName })
          
          console.log('done', res)
       }
