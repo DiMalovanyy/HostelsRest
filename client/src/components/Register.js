@@ -59,7 +59,7 @@ const Register = ({ onLogIn, auth: { loggedIn } }) => {
          const data = { name: name, email: email, password: password }
 
          try {
-            const res = await axios.post('https://pacific-escarpment-18341.herokuapp.com/register', data)
+            const res = await axios.post('http://localhost:8080/register', data)
    
             const { error } = res.data
    

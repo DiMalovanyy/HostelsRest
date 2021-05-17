@@ -35,7 +35,7 @@ const MyHousing = () => {
       event.preventDefault()
 
       try {
-         const res = await axios.post('https://pacific-escarpment-18341.herokuapp.com/private/upgrade_user',
+         const res = await axios.post('http://localhost:8080/private/upgrade_user',
          { degreeLevel: parseInt(degreeLevel), sex, facultyName })
          
          console.log('done', res)

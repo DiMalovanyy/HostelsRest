@@ -24,6 +24,7 @@ var (
 	errHostelsNotFound          = errors.New("hostels for faulty not found")
 	errNoFreeRooms              = errors.New("no free rooms in faculty")
 	errIncorrectSex             = errors.New("incorrect request sex")
+	errUserNotSetteled          = errors.New("user not settled")
 )
 
 type ctxKey int8
