@@ -27,7 +27,7 @@ func Start(config *Config) error {
 		HttpOnly: false,
 		Secure:   false,
 		MaxAge:   2592000,
-		Domain:   "http://localhost:3000",
+		Domain:   "localhost",
 	}
 	serv, err := NewServer(config.LogLevel, store, sessionStore)
 	if err != nil {
