@@ -9,21 +9,29 @@ import MyHousing from './components/MyHousing'
 import './App.css'
 
 const App = () => {
-   const [cookie, setCookie] = useState({})
-   const [view, setView] = useState('default')
+   //const [view, setView] = useState('default')
    const [status, setStatus] = useState('new')
+   const [auth, setAuth] = useState({
+      loggedIn: false,
+      loading: true
+   })
 
-   const logIn = () => { setView('user') }
+   const login = () => { 
+      setAuth({
+         loggedIn: true,
+         loading: false
+      })
+   }
 
    return (
       <Router>
-         <Navbar view={view} />
+         <Navbar />
          <Switch>
             <Route exact path="/" render={() => <Home />} />
             <Route path="/">
                <section className="container">
                   <Route exact path="/register" component={Register} />
-                  <Route exact path="/login" render={() => <Login onLogIn={logIn} />} />
+                  <Route exact path="/login" render={() => <Login onLogIn={login} />} />
                   <Route exact path="/myhousing" render={() => <MyHousing status={status} />} />
                </section>
             </Route>

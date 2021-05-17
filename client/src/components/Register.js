@@ -75,8 +75,10 @@ const Register = () => {
             setTimeout(() => history.push('/login'), 2000)
          }
          catch (error) {
-            console.log(error)
-            showNotification('Network error', 'notification-error')
+            if (error.response.data.error)
+               showNotification(error.response.data.error, 'notification-error')
+            else
+               showNotification(error.message, 'notification-error')
          }
       }
    }

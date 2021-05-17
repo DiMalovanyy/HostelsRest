@@ -30,7 +30,7 @@ const MyHousing = ({ status }) => {
          const res = await axios.post('https://pacific-escarpment-18341.herokuapp.com/upgrade_user',
          { degreeLevel, sex, facultyName })
          
-         console.log('done')
+         console.log('done', res)
       }
       catch (error) {
          console.log(error)

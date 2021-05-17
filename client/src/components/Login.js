@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useHistory, Redirect } from 'react-router-dom'
 import axios from 'axios'
 
 const Login = ({ onLogIn }) => {
@@ -53,18 +53,21 @@ const Login = ({ onLogIn }) => {
             const { error } = await res.data
    
             if (error) {
-               showNotification(error.description, 'notification-error')
+               showNotification(error, 'notification-error')
                return
             }
 
             onLogIn()
             
             // Navigate to the home page once logged in
-            history.push('/')
+            //history.push('/')
+            return <Redirect to="/myhousing" />
          }
          catch (error) {
-            console.log(error)
-            showNotification('Network error', 'notification-error')
+            if (error.response.data.error)
+               showNotification(error.response.data.error, 'notification-error')
+            else
+               showNotification(error.message, 'notification-error')
          }
       }
    }

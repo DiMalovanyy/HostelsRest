@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { makeStyles } from '@material-ui/core/styles';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Collapse from '@material-ui/core/Collapse';
-import SendIcon from '@material-ui/icons/Send';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import StarBorder from '@material-ui/icons/StarBorder';
+import { makeStyles } from '@material-ui/core/styles'
+import ListSubheader from '@material-ui/core/ListSubheader'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
+import Collapse from '@material-ui/core/Collapse'
+import SendIcon from '@material-ui/icons/Send'
+import HouseIcon from '@material-ui/icons/House'
+import ExpandLess from '@material-ui/icons/ExpandLess'
+import ExpandMore from '@material-ui/icons/ExpandMore'
 
 import { getAllHousings, getFaculties } from '../service/data'
 
@@ -26,12 +26,10 @@ const useStyles = makeStyles((theme) => ({
 
 const HousingList = () => {
    const classes = useStyles()
-   const [open, setOpen] = React.useState(true)
 
    const [items, setItems] = useState([])
 
    const handleClick = (faculty) => {
-      //setOpen(!open)
       setItems(items.map(item => item.faculty_name === faculty.faculty_name ?
          ({...item, open: !item.open }) : item))
    }
@@ -71,10 +69,10 @@ const HousingList = () => {
                </ListItem>
                <Collapse in={item.open} timeout="auto" unmountOnExit>
                   <List component="div" disablePadding>
-                     {item.housings && item.housings.map(housing => (
-                        <ListItem button className={classes.nested}>
+                     {item.housings && item.housings.map((housing, j) => (
+                        <ListItem key={j+10} button className={classes.nested}>
                            <ListItemIcon>
-                           <StarBorder />
+                              <HouseIcon />
                            </ListItemIcon>
                            <ListItemText primary={housing.hostel_name} />
                         </ListItem>
