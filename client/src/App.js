@@ -1,11 +1,13 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import axios from 'axios'
 import Navbar from './components/Navbar'
 import Home from './components/Home'
 import Register from './components/Register'
 import Login from './components/Login'
 import MyHousing from './components/MyHousing'
 import PrivateRoute from './components/routing/PrivateRoute'
+import { getStudentStatus } from '../service/data'
 
 import './App.css'
 
@@ -15,14 +17,32 @@ const App = () => {
       loading: true
    })
 
+   useEffect(() => {
+      login()
+   }, [])
+
    const login = () => { 
-      setAuth({
-         loggedIn: true,
-         loading: false
-      })
+      const status = await getStudentStatus()
+      if (status !== null) {
+         setAuth({
+            loggedIn: true,
+            loading: false
+         })
+      }
+      else {
+         setAuth({
+            loggedIn: false,
+            loading: false
+         })
+      }
    }
 
    const logout = () => {
+      try {
+         const res = await axios.get('http://localhost:8080/private/logout', { withCredentials: true })
+      }
+      catch(error) { console.error(error) }
+
       setAuth({
          loggedIn: false,
          loading: false
