@@ -22,11 +22,11 @@ func Start(config *Config) error {
 	sessionStore := sessions.NewCookieStore([]byte(config.SessionKey))
 
 	sessionStore.Options = &sessions.Options{
-		SameSite: http.SameSiteDefaultMode,
+		// SameSite: http.SameSiteDefaultMode,
 		// Path:     "/",
-		HttpOnly: false,
-		Secure:   false,
-		MaxAge:   2592000,
+		// HttpOnly: false,
+		// Secure:   false,
+		// MaxAge:   2592000,
 	}
 	serv, err := NewServer(config.LogLevel, store, sessionStore)
 	if err != nil {
