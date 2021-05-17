@@ -22,7 +22,7 @@ func Start(config *Config) error {
 	sessionStore := sessions.NewCookieStore([]byte(config.SessionKey))
 
 	sessionStore.Options = &sessions.Options{
-		SameSite: http.SameSiteNoneMode,
+		SameSite: http.SameSiteDefaultMode,
 		Path:     "/",
 		HttpOnly: false,
 		Secure:   false,
