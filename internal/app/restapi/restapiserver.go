@@ -27,13 +27,14 @@ func Start(config *Config) error {
 		HttpOnly: false,
 		Secure:   false,
 		MaxAge:   2592000,
+		Domain:   "localhost:3000",
 	}
 	serv, err := NewServer(config.LogLevel, store, sessionStore)
 	if err != nil {
 		return err
 	}
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost", "http://localhost:3000"},
+		AllowedOrigins:   []string{"http://localhost", "http://localhost:3000", "http://pacific-escarpment-18341.herokuapp.com"},
 		AllowCredentials: true,
 		AllowedMethods:   []string{"POST", "GET", "OPTIONS", "PUT", "DELETE"},
 		AllowedHeaders:   []string{"Accept", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization"},
