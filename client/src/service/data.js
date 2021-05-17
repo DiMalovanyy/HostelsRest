@@ -12,7 +12,7 @@ export const getFaculties = async () => {
 
 export const getStudentStatus = async () => {
    try {
-      const res = await axios.get('https://pacific-escarpment-18341.herokuapp.com/user_status')
+      const res = await axios.get('https://pacific-escarpment-18341.herokuapp.com/user_status', { withCredentials: true })
       
       if (res.status !== 200) return null
       
