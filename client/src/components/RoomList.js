@@ -7,9 +7,9 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import Collapse from '@material-ui/core/Collapse'
 import SendIcon from '@material-ui/icons/Send'
-import HouseIcon from '@material-ui/icons/House'
 import ExpandLess from '@material-ui/icons/ExpandLess'
 import ExpandMore from '@material-ui/icons/ExpandMore'
+import FaceIcon from '@material-ui/icons/Face'
 
 import { getHousingRooms } from '../service/data'
 
@@ -83,7 +83,7 @@ const RoomList = () => {
                         {item.names && item.names.map((name, j) => (
                            <ListItem key={j+10} button className={classes.nested}>
                               <ListItemIcon>
-                                 <HouseIcon />
+                                 <FaceIcon />
                               </ListItemIcon>
                               <ListItemText primary={name} />
                            </ListItem>
