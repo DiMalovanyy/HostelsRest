@@ -21,12 +21,12 @@ func (repo *UserRepo) CreateUser(user *model.User) error {
 	}
 
 	return repo.store.db.QueryRow(
-		"INSERT INTO users (name, email, encrypted_password, sex, room_id, faculty_id ) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id",
+		"INSERT INTO users (name, email, encrypted_password, sex, room_id, grade, faculty_id ) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id",
 		user.Name,
 		user.Email,
 		user.EncryptedPassword,
 		model.UNDEFINED,
-		0, 0,
+		0, 0, 0,
 	).Scan(&user.Id)
 }
 
@@ -34,13 +34,14 @@ func (repo *UserRepo) FindByName(name string) (*model.User, error) {
 	u := &model.User{}
 
 	if err := repo.store.db.QueryRow(
-		"SELECT id, name, email, encrypted_password, sex, room_id, faculty_id FROM users WHERE name = $1", name).Scan(
+		"SELECT id, name, email, encrypted_password, sex, room_id, grade, faculty_id FROM users WHERE name = $1", name).Scan(
 		&u.Id,
 		&u.Name,
 		&u.Email,
 		&u.EncryptedPassword,
 		&u.Sex,
 		&u.RoomId,
+		&u.Grade,
 		&u.FacultyId,
 	); err != nil {
 		if err == sql.ErrNoRows {
@@ -56,13 +57,14 @@ func (repo *UserRepo) FindByEmail(email string) (*model.User, error) {
 	u := &model.User{}
 
 	if err := repo.store.db.QueryRow(
-		"SELECT id, name, email, encrypted_password, sex, room_id, faculty_id FROM users WHERE email = $1", email).Scan(
+		"SELECT id, name, email, encrypted_password, sex, room_id, grade, faculty_id FROM users WHERE email = $1", email).Scan(
 		&u.Id,
 		&u.Name,
 		&u.Email,
 		&u.EncryptedPassword,
 		&u.Sex,
 		&u.RoomId,
+		&u.Grade,
 		&u.FacultyId,
 	); err != nil {
 		if err == sql.ErrNoRows {
@@ -78,13 +80,14 @@ func (repo *UserRepo) FindById(id int) (*model.User, error) {
 	u := &model.User{}
 
 	if err := repo.store.db.QueryRow(
-		"SELECT id, name, email, encrypted_password, sex, room_id, faculty_id FROM users WHERE id=$1", id).Scan(
+		"SELECT id, name, email, encrypted_password, sex, room_id, grade, faculty_id FROM users WHERE id=$1", id).Scan(
 		&u.Id,
 		&u.Name,
 		&u.Email,
 		&u.EncryptedPassword,
 		&u.Sex,
 		&u.RoomId,
+		&u.Grade,
 		&u.FacultyId,
 	); err != nil {
 		if err == sql.ErrNoRows {
