@@ -28,6 +28,6 @@ func TestRoom(t *testing.T) *Room {
 		Number:       "#1",
 		Capacity:     10,
 		FreeCapacity: 5,
-		RoomSex:      MEN,
+		RoomSex:      "male",
 	}
 }

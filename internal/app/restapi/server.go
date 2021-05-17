@@ -315,7 +315,7 @@ func (s *server) handleUpgradeUserRequest() http.HandlerFunc {
 
 			roomId, err := s.store.Room().GetFreeRoomByHostelId(hostel.Id)
 			if err != nil {
-				if err == store.ErrNoData {
+				if err == store.ErrNoData || err == store.ErrEmptyData {
 					continue
 				} else {
 					s.error(rw, r, http.StatusInternalServerError, err)
