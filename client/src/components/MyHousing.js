@@ -39,14 +39,16 @@ const MyHousing = () => {
             setStatus(true)
          else
             setStatus(false)
-
-         setFormData({
-            degreeLevel: '1',
-            sex: 'male',
-            facultyName: faculties[0]
-         })
       })()
-   }, [faculties])
+   }, [])
+
+   if (status !== null && faculties.length > 0) {
+      setFormData({
+         degreeLevel: '1',
+         sex: 'male',
+         facultyName: faculties[0]
+      })
+   }
 
    const { degreeLevel, sex, facultyName } = formData
 
