@@ -129,6 +129,8 @@ func (repo *UserRepo) GetAllUsersByRoomId(roomId int) ([]*model.User, error) {
 		return nil, err
 	}
 
+	defer rows.Close()
+
 	for rows.Next() {
 		user := &model.User{}
 		if err := rows.Scan(

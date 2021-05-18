@@ -29,6 +29,8 @@ func (h *HostelRepo) GetHostelsByFucultyId(fucultyId int) ([]*model.Hostel, erro
 		return nil, err
 	}
 
+	defer rows.Close()
+
 	for rows.Next() {
 		hostel := &model.Hostel{}
 		if err := rows.Scan(&hostel.Id, &hostel.Description, &hostel.FacultyId); err != nil {
