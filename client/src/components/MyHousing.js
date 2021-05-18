@@ -46,7 +46,7 @@ const MyHousing = () => {
             facultyName: faculties[0]
          })
       })()
-   }, [])
+   }, [faculties])
 
    const { degreeLevel, sex, facultyName } = formData
 
