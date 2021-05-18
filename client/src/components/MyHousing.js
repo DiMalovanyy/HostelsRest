@@ -31,15 +31,17 @@ const MyHousing = () => {
    }
 
    useEffect(() => {
+      let isMounted = true;
       (async () => {
          const data = await getFaculties()
-         setFaculties(data)
+         if(isMounted) setFaculties(data)
          const studStatus = await getStudentStatus()
-         if (studStatus)
+         if (isMounted && studStatus)
             setStatus(true)
-         else
+         else if(isMounted)
             setStatus(false)
       })()
+      return () => { isMounted = false };
    }, [])
 
    const { degreeLevel, sex, facultyName } = formData
@@ -49,7 +51,14 @@ const MyHousing = () => {
    const onSubmit = async event => {
       event.preventDefault()
 
-      if (facultyName === '') setFormData({ ...formData, facultyName: faculties[0]})
+      console.log('1: ', faculties)
+      console.log('2:', faculties[0])
+
+      const body = {
+         degreeLevel: parseInt(degreeLevel),
+         sex,
+         facultyName: facultyName === '' ? faculties[0] : facultyName
+      }
 
       try {
          const res = await axios.post('http://localhost:8080/private/upgrade_user',
