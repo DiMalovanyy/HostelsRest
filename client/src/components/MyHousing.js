@@ -5,8 +5,8 @@ import RoomList from './RoomList'
 
 const MyHousing = () => {
    const [formData, setFormData] = useState({
-      degreeLevel: '',
-      sex: '',
+      degreeLevel: '1',
+      sex: 'male',
       facultyName: ''
    })
 
@@ -42,20 +42,20 @@ const MyHousing = () => {
       })()
    }, [])
 
-   if (status !== null && faculties.length > 0) {
-      setFormData({
-         degreeLevel: '1',
-         sex: 'male',
-         facultyName: faculties[0]
-      })
-   }
-
    const { degreeLevel, sex, facultyName } = formData
 
    const onChange = event => setFormData({ ...formData, [event.target.name]: event.target.value })
 
    const onSubmit = async event => {
       event.preventDefault()
+
+      if (status !== null && faculties.length > 0) {
+         setFormData({
+            degreeLevel: '1',
+            sex: 'male',
+            facultyName: faculties[0]
+         })
+      }
 
       try {
          const res = await axios.post('http://localhost:8080/private/upgrade_user',
