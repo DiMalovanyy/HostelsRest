@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"log"
 	"net/http"
 
 	"github.com/UniverOOP/internal/app/model"
@@ -297,6 +298,7 @@ func (s *server) handleHostelRoomMembers() http.HandlerFunc {
 			s.error(rw, r, http.StatusInternalServerError, nil)
 		}
 
+		log.Print("Room id: ", currentUser.RoomId)
 		room, err := s.store.Room().GetRoomByRoomId(currentUser.RoomId)
 		if err != nil {
 			s.error(rw, r, http.StatusInternalServerError, err)
@@ -319,6 +321,8 @@ func (s *server) handleHostelRoomMembers() http.HandlerFunc {
 
 		for _, room = range rooms {
 			var currentRoom Room
+			currentRoom.Names = make([]string, 0)
+
 			currentRoom.RoomNumber = room.Number
 			users, err := s.store.User().GetAllUsersByRoomId(room.Id)
 			if err != nil && err != store.ErrEmptyData {

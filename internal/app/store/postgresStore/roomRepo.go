@@ -26,13 +26,15 @@ func (r *RoomRepo) CreateRoom(room *model.Room) error {
 func (r *RoomRepo) GetAllRoomsByHostleId(hostelId int) ([]*model.Room, error) {
 	rooms := make([]*model.Room, 0)
 
+	// log.Print("Hostel id: ", hostelId)
 	rows, err := r.store.db.Query("SELECT id, number, capacity, free_capacity, hostel_id, room_sex FROM rooms WHERE hostel_id = $1", hostelId)
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	for rows.Next() {
-		room := &model.Room{}
+		room := new(model.Room)
 		if err := rows.Scan(&room.Id, &room.Number, &room.Capacity, &room.FreeCapacity, &room.HostelId, &room.RoomSex); err != nil {
 			return nil, err
 		}
@@ -45,6 +47,7 @@ func (r *RoomRepo) GetAllRoomsByHostleId(hostelId int) ([]*model.Room, error) {
 	if len(rooms) == 0 {
 		return nil, store.ErrEmptyData
 	}
+	// log.Print("log inner: ", len(rooms))
 	return rooms, nil
 }
 
