@@ -37,7 +37,7 @@ const MyHousing = () => {
       (async () => {
          const data = await getFaculties()
          setFaculties(data)
-         setFormData({...formData, facultyName: faculties[0] ? faculties[0] : ''})
+         setFormData({...formData, facultyName: faculties.length > 0 ? faculties[0] : ''})
          const studStatus = await getStudentStatus()
          if (studStatus)
             setStatus(true)
