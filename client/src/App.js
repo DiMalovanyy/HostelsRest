@@ -39,7 +39,7 @@ const App = () => {
 
    const logout = async () => {
       try {
-         const res = await axios.get('http://localhost:8080/private/logout', { withCredentials: true })
+         await axios.get('http://localhost:8080/private/logout', { withCredentials: true })
       }
       catch(error) { console.error(error) }
 

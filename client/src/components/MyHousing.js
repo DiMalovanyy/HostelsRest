@@ -5,8 +5,8 @@ import RoomList from './RoomList'
 
 const MyHousing = () => {
    const [formData, setFormData] = useState({
-      degreeLevel: '1',
-      sex: 'male',
+      degreeLevel: '',
+      sex: '',
       facultyName: ''
    })
 
@@ -30,9 +30,6 @@ const MyHousing = () => {
       setTimeout(() => clearNotification(), 4000)
    }
 
-
-   const { degreeLevel, sex, facultyName } = formData
-
    useEffect(() => {
       (async () => {
          const data = await getFaculties()
@@ -42,10 +39,16 @@ const MyHousing = () => {
             setStatus(true)
          else
             setStatus(false)
+
+         setFormData({
+            degreeLevel: '1',
+            sex: 'male',
+            facultyName: faculties[0]
+         })
       })()
-      setFormData({...formData, facultyName: faculties.length > 0 ? faculties[0] : ''})
-      console.log('faculties in useEffect: ', faculties)
    }, [])
+
+   const { degreeLevel, sex, facultyName } = formData
 
    const onChange = event => setFormData({ ...formData, [event.target.name]: event.target.value })
 
