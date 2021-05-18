@@ -235,7 +235,12 @@ img { width: 100%; }
    padding: 0 2rem;
    margin-top: 6rem;
    margin-bottom: 3rem;
-}  
+}
+
+.flex {
+   display: flex;
+   justify-content: space-around;
+}
 /* END of home */
 
 /* Mobile Styles */
@@ -267,4 +272,8 @@ img { width: 100%; }
    .navbar h1 { margin-bottom: 1rem; }
 
    .navbar .welcome { display: none; }
+}
+
+@media (max-width: 576px) {
+   #home, .flex { flex-direction: column; }
 }

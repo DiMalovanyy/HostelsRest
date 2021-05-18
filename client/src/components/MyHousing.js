@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { getFaculties, getStudentStatus } from '../service/data'
 import RoomList from './RoomList'
+import { ReactComponent as InsideSvg } from './inside.svg';
 
 const MyHousing = () => {
    const [formData, setFormData] = useState({
@@ -50,9 +51,6 @@ const MyHousing = () => {
 
    const onSubmit = async event => {
       event.preventDefault()
-
-      console.log('1: ', faculties)
-      console.log('2:', faculties[0])
 
       const body = {
          degreeLevel: parseInt(degreeLevel),
@@ -119,7 +117,10 @@ const MyHousing = () => {
          ) : (status === true && (
             <>
                <h2 className="lead text-primary">List of Rooms</h2>
-               <RoomList />
+               <div className="flex">
+                  <RoomList className="left" />
+                  <InsideSvg className="right" style={{height: '300px', width: '600px'}} />
+               </div>
             </>
          ))
       }
