@@ -5,8 +5,8 @@ import RoomList from './RoomList'
 
 const MyHousing = () => {
    const [formData, setFormData] = useState({
-      degreeLevel: '',
-      sex: '',
+      degreeLevel: '1',
+      sex: 'male',
       facultyName: ''
    })
 
@@ -37,6 +37,7 @@ const MyHousing = () => {
       (async () => {
          const data = await getFaculties()
          setFaculties(data)
+         setFormData({...formData, facultyName: faculties[0] ? faculties[0] : ''})
          const studStatus = await getStudentStatus()
          if (studStatus)
             setStatus(true)

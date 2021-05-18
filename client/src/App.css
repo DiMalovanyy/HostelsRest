@@ -229,12 +229,13 @@ img { width: 100%; }
 #home {
    display: flex;
    max-width: 1200px;
+   justify-content: space-around;
    margin: auto;
    overflow: hidden;
    padding: 0 2rem;
    margin-top: 6rem;
    margin-bottom: 3rem;
-}
+}  
 /* END of home */
 
 /* Mobile Styles */

@@ -31,7 +31,7 @@ const RoomList = () => {
    const [loading, setLoading] = useState(true)
 
    const handleClick = (room) => {
-      let rooms = items.rooms.map(item => item.num === room.num ? ({...item, open: !item.open }) : item)
+      let rooms = items.rooms.map(item => item.room_number === room.room_number ? ({...item, open: !item.open }) : item)
       setItems({ ...items, rooms})
    }
 
@@ -75,7 +75,7 @@ const RoomList = () => {
                      <ListItemIcon>
                         <SendIcon />
                      </ListItemIcon>
-                     <ListItemText primary={item.num} />
+                     <ListItemText primary={item.room_number} />
                      {item.open ? <ExpandLess /> : <ExpandMore />}
                   </ListItem>
                   <Collapse in={item.open} timeout="auto" unmountOnExit>
