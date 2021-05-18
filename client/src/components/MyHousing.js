@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { getFaculties, getStudentStatus } from '../service/data'
 import RoomList from './RoomList'
-import { ReactComponent as InsideSvg } from './inside.svg';
+import { ReactComponent as RelaxSvg } from './relax.svg';
 
 const MyHousing = () => {
    const [formData, setFormData] = useState({
@@ -119,7 +119,7 @@ const MyHousing = () => {
                <h2 className="lead text-primary">List of Rooms</h2>
                <div className="flex">
                   <RoomList className="left" />
-                  <InsideSvg className="right" style={{height: '300px', width: '600px'}} />
+                  <RelaxSvg className="right" style={{height: '300px', width: '600px'}} />
                </div>
             </>
          ))
