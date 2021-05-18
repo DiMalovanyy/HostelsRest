@@ -49,13 +49,7 @@ const MyHousing = () => {
    const onSubmit = async event => {
       event.preventDefault()
 
-      if (status !== null && faculties.length > 0) {
-         setFormData({
-            degreeLevel: '1',
-            sex: 'male',
-            facultyName: faculties[0]
-         })
-      }
+      if (facultyName === '') setFormData({ ...formData, facultyName: faculties[0]})
 
       try {
          const res = await axios.post('http://localhost:8080/private/upgrade_user',
