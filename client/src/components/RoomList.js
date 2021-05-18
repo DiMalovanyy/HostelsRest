@@ -64,7 +64,7 @@ const RoomList = () => {
             aria-labelledby="nested-list-subheader"
             subheader={
             <ListSubheader component="div" id="nested-list-subheader">
-               Hostel {items.hostel_name} rooms:
+               Hostel {items.hostel_name}
             </ListSubheader>
             }
             className={classes.root}
@@ -75,7 +75,7 @@ const RoomList = () => {
                      <ListItemIcon>
                         <SendIcon />
                      </ListItemIcon>
-                     <ListItemText primary={item.room_number} />
+                     <ListItemText primary={`Room ${item.room_number}`} />
                      {item.open ? <ExpandLess /> : <ExpandMore />}
                   </ListItem>
                   <Collapse in={item.open} timeout="auto" unmountOnExit>
