@@ -62,7 +62,7 @@ const MyHousing = () => {
 
       try {
          const res = await axios.post('http://localhost:8080/private/upgrade_user',
-         { degreeLevel: parseInt(degreeLevel), sex, facultyName }, {withCredentials: true})
+         body, {withCredentials: true})
          
          if (!res.status === 200) {
             showNotification(`Response status: ${res.status}`, 'notification-error')
